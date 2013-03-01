@@ -1,0 +1,103 @@
+/*	
+		THEME BLUE
+		
+		Light:	#e2eaf4;
+		Soft:	#4b82b8;
+		Strong:	#3765a0;
+*/
+
+
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover {
+	background:#fdf5ce url("#{resource['primefaces-betplus-blue:images/ui-bg_glass_100_soft-blue_1x400.png']}") 50% 50% repeat-x; /* soft blue */
+	color:#3765a0; /* strong blue */
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-state-hover a, .ui-state-hover a:hover, .dataTableTfoot  {
+	color:#3765a0 !important; /*strong blue*/
+}
+
+.ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+	border:1px solid #4b82b8; /* soft blue */
+}
+
+ul#Plus ul {
+	border: 1px solid #3765a0; /*strong blue*/
+}
+
+.searchAll {
+	background:white url("#{resource['primefaces-betplus-blue:images/searchBlue.png']}") no-repeat !important; /* Theme Blue */
+}
+
+.calendar input {
+	background:white url("#{resource['primefaces-betplus-blue:images/calendarBlue.png']}") no-repeat !important; /* Theme Blue */
+}
+
+#ui-datepicker-div {
+	box-shadow:0 2px 2px #3765a0 !important; /*strong blue*/
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+	background:#ffffff url("#{resource['primefaces-betplus-blue:images/ui-bg_glass_100_soft-blue_1x400.png']}") 50% 50% repeat-x; /* soft blue */
+}
+
+.ui-state-default .ui-icon, .ui-state-hover .ui-icon, .ui-state-focus .ui-icon, .ui-state-active .ui-icon, .ui-state-highlight .ui-icon,
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon, {
+	background-image:url("#{resource['primefaces-betplus-blue:images/ui-icons_228ef1_256x240.png']}"); /* Blue */
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+	-moz-box-shadow:inset 0 2px 2px #4b82b8; /*soft blue*/
+	-webkit-box-shadow:inset 0 2px 2px #4b82b8; /*soft blue*/
+	box-shadow:inset 0 2px 2px #4b82b8; /*soft blue*/
+}
+
+.ui-inputfield.ui-state-focus, .ui-widget-content .ui-inputfield.ui-state-focus, .ui-widget-header .ui-inputfield.ui-state-focus {
+	box-shadow:0px 0px 5px #4b82b8, inset 0 2px 2px #4b82b8; /*soft blue*/
+}
+
+.ui-datatable-odd {
+  background: none repeat scroll 0 0 #e2eaf4; /* light blue */
+}
+
+ul.halfMoon-left a:hover li, ul.halfMoon-right a:hover li {
+	background-color:#3765a0; /*strong blue*/
+	box-shadow: 0px 0px 15px #4b82b8; /*soft blue*/
+}
+
+div.framePortal {
+	background:#cccccc url("#{resource['primefaces-betplus-blue:images/aqua-blue.jpg']}"); /* Theme Blue */
+}
+
+div.slidePortal {
+	box-shadow:inset 0px 0px 8px #3765a0; /*strong blue*/
+}
+
+ul#Plus a, ul#Plus a:hover {
+	background-color:#3765a0; /*strong blue*/
+}
+
+ul#Plus ul li a:hover {
+	box-shadow:0px 0px 8px #3765a0; /*strong blue*/
+}
+
+ul#Plus li:hover ul, ul#Plus li.sfhover ul {
+	box-shadow:0 2px 2px #3765a0; /*strong blue*/
+}
+
+.iconBG a {
+	background: url(../resources/images/iconBg_blue.png) no-repeat; /* Theme Blue */
+}
+
+.ui-widget-header {
+	background:url("#{resource['primefaces-betplus-blue:images/aqua-blue.jpg']}"); /* Theme Blue */
+}
+
+.layoutUnit {
+	background:#FFFFFF url("#{resource['primefaces-betplus-blue:images/aqua-blue.jpg']}") !important; /* Theme Blue */
+}
+
+.ui-state-highlight {
+  background: url() #e2eaf4 !important; /* light blue */
+  border: 1px solid #3765a0 !important; /* strong blue*/
+}

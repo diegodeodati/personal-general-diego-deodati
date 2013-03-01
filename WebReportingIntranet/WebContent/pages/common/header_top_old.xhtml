@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    >
+    
+    <div style="float: left;width: 20%">
+		<p:media value="/resources/media/world-2.swf" style="margin-left:1.5%;" width="250px" height="50px" player="flash">  
+		    <f:param name="autoPlay" value="true" /> 
+		    <f:param name="wmode" value="transparent" /> 
+		</p:media>
+	</div>
+	
+	<!-- <div class="titlePageCurrent" style="color:white;float: left;width: 25%;padding-top:1.2%;text-align: right;font-family:'ArialN';font-size:14px;letter-spacing: 0px;">
+			TITOLO PAGINA CORRENTE
+	</div> -->
+	
+	<div style="float: left;width: 30%;text-align: left;margin-top:0.8%">
+		<div class="globalSearch">
+			<div>
+				<h:form>
+					<p:outputPanel>
+						<h:outputText value="Search all filtered fields:  " style="color:white;font-size:10px;margin-left:24px;" />
+			            <p:inputText id="globalFilter" onkeyup="locationsDataTable.filter()" style="width:150px" />
+			        </p:outputPanel>
+			    </h:form>
+	        </div>
+        </div>
+	</div>
+	
+	<div style="float: left;width: 50%;">
+		
+		<h:form id="logOutForm" prependId="false">
+			<div style="float: left;width: 80%;text-align: right;color:white;font-size:10px;padding-top: 17px;text-align: right;">
+				<b>PAGINA:  </b><i id="">Summary</i>&nbsp;&nbsp;|&nbsp;&nbsp;
+				<b>#{msgs.label_username} </b><i id="">#{loginBean.loggedUser.getEmployeeName()}</i>&nbsp;&nbsp;|&nbsp;&nbsp;
+				<b>#{msgs.label_loginDate} </b>#{utilityBean.getDateFormatted(loginBean.loggedUser.loginDate, languageBean.dateTimePatternSelected)} &nbsp;	
+			</div>
+			<div style="float: left;width: 15%;padding-left:4%;">
+				<div style="float: left;">
+					<ul class="button_changeBg">
+						<li><div class="iconBG"><a class="buttonOpacity" title="Change Background" href="#"></a></div>
+							<ul id="nav">
+								<li>
+									<a href="#" onclick="switchThemeColor('betplus-blue')" title="Select Blue">
+										<h:graphicImage library="images" name="iconBg_blue.png" title="Select Blue" />
+									</a>
+								</li>
+								<li>
+									<a href="#" onclick="switchThemeColor('betplus-green')" title="Select Green">
+										<h:graphicImage library="images" name="iconBg_green.png" title="Select Green" />
+									</a>
+								</li>	
+								<li>
+									<a href="#" onclick="switchThemeColor('betplus-red')" title="Select Red">
+										<h:graphicImage library="images" name="iconBg_red.png" title="Select Red" />
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>		
+				</div>
+				<div class="button" style="float: left;">
+					<p:commandLink title="Export excel" ajax="false">
+					    <h:graphicImage name="images/excel.png" onmouseover="this.src='/WebReportingIntranet/javax.faces.resource/images/excel_blue.png.xhtml'" onmouseout="this.src='/WebReportingIntranet/javax.faces.resource/images/excel.png.xhtml'" />
+					</p:commandLink>
+				</div>
+				<div class="button" style="float: left">
+					<p:commandLink action="#{loginBean.logout}" title="Logout" ajax="false">
+					    <h:graphicImage name="images/logout.png" onmouseover="this.src='/WebReportingIntranet/javax.faces.resource/images/logout_blue.png.xhtml'" onmouseout="this.src='/WebReportingIntranet/javax.faces.resource/images/logout.png.xhtml'" />
+					</p:commandLink>
+				</div>
+			</div>
+			<p:inputText id="hiddenThemeColor" value="#{loginBean.theme}" ajax="true" style="visibility:hidden;" >
+				<f:ajax event="click" listener="#{loginBean.changeThemeAjax}" />
+			</p:inputText>
+		</h:form>
+		
+	</div>
+	
+</ui:composition>

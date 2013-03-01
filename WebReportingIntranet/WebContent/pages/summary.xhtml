@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+
+	<f:view locale="#{languageBean.locale}" />
+	
+	<h:head>
+	
+		<h:outputScript name="switcherCss.js" library="javascript" />
+		<h:outputScript name="slider.js" library="javascript" />
+		<h:outputScript name="jquery.scrollTo.js" library="javascript" />
+		<h:outputScript name="fixColumn.js" library="javascript" />
+		<title>Summary</title>
+		
+	</h:head>
+	
+	<h:body>
+	
+		<p:layout fullPage="true">
+	
+			<p:layoutUnit position="west" size="3%">
+				<ul class="halfMoon-left">
+					<a id="slidePrevBtn" href="javascript:void(0)">
+						<li id="halfMoon-left" class="hM-l disabledButton">
+							<h:graphicImage library="images" name="freccia_sx.png" />
+						</li>
+					</a>
+				</ul>
+			</p:layoutUnit>
+	
+			<p:layoutUnit position="east" size="3%">
+				<ul class="halfMoon-right">
+					<a id="slideNextBtn" href="javascript:void(0);">
+						<li id="halfMoon-right" class="hM-r">
+							<h:graphicImage library="images" name="freccia_dx.png" />
+						</li>
+					</a>
+				</ul>
+			</p:layoutUnit>
+	
+			<p:layoutUnit position="center" styleClass="layoutUnit layoutUnit-bRadius">
+			
+				<p:layout>
+		
+					<center>
+					
+						<p:layoutUnit position="north" size="50" styleClass="layoutUnit-HeaderTop">
+							<div class="topPortal">
+								<ui:include src="common/header_top.xhtml" />
+							</div>
+						</p:layoutUnit>
+						
+						<p:layoutUnit position="center" styleClass="layoutUnit" style="background-position:0px -55px !important;">
+	
+							<div class="slidePortal" id="slide1">
+							
+								<h:form id="summaryForm" prependId="false">
+								
+									<p:dataTable
+										id="locationsDataTableId"
+										widgetVar="locationsDataTable"
+										emptyMessage="No locations found with given criteria"
+										value="#{summaryManagedBean.summaryCasinoV3List}"
+										var="location"
+										scrollable="true"
+										draggableColumns="false"
+										resizableColumns="true"
+										style="width:auto !important;height:auto !important;"
+										oncomplete="locationsDataTable.filter();"
+										scrollHeight="0"
+										liveScroll="true"
+										scrollRows="50"
+									>
+	
+										<p:column
+											id="ammsColumn"
+											filterBy="#{location.aamsLocationName}"
+											sortBy="#{location.aamsLocationName}"
+											headerText="&nbsp;&nbsp;&nbsp;Location"
+											footerText=""
+											filterMatchMode="contains"
+											style="text-align:left;"
+											width="110"
+										>
+											<h:outputText value="#{location.aamsLocationName}" style="padding-left:5px;" />
+										</p:column>
+										<p:column footerText="" sortBy="#{location.produttori}" style="text-align:left" width="30">
+											<f:facet name="header">
+												<h:outputText value="" />
+											</f:facet>
+											<h:outputText value="#{location.produttori}" style="padding-left:5px;" />
+										</p:column>
+										<p:column footerText="Count: #{summaryManagedBean.footerNumCity}" sortBy="#{location.cciudad}" style="text-align:left" width="110" filterBy="#{location.cciudad}">
+											<f:facet name="header">
+												<h:outputText value="&nbsp;&nbsp;&nbsp;City" />
+											</f:facet>
+											<h:outputText value="#{location.cciudad}" style="padding-left:5px;" />
+										</p:column>
+										<p:column footerText="" sortBy="#{location.aamsLocationId}" style="text-align:left" width="110" filterBy="#{location.aamsLocationId}">
+											<f:facet name="header">
+												<h:outputText value="&nbsp;&nbsp;&nbsp;AAMS location ID" />
+											</f:facet>
+											<h:outputText value="#{location.aamsLocationId}" />
+										</p:column>
+										<p:column footerText="" sortBy="#{location.openDate}" style="text-align:center" width="110">
+											<f:facet name="header">
+												<h:outputText value="Opening Date" />
+											</f:facet>
+											<h:outputText value="#{location.openDate}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerBet}" sortBy="#{location.bet}" style="text-align:center" width="60">
+											<f:facet name="header">
+												<h:outputText value="Bet" />
+											</f:facet>
+											<h:outputText value="#{location.bet}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerNetWL}" style="text-align:center" width="60">
+											<f:facet name="header">
+												<h:outputText value="Net W/L" />
+											</f:facet>
+											<h:outputText value="#{location.netWinLose}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerPercTerziIncaricati}" style="text-align:center" width="110">
+											<f:facet name="header">
+												<h:outputText value="% Terzi Incaricati" />
+											</f:facet>
+											<h:outputText value="#{location.percentGestore}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerPerSupplier}" style="text-align:center" width="60">
+											<f:facet name="header">
+												<h:outputText value="% Supplier" />
+											</f:facet>
+											<h:outputText value="#{location.percentSupplier}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerRtp}" style="text-align:center" width="60">
+											<f:facet name="header">
+												<h:outputText value="% Rtp" />
+											</f:facet>
+											<h:outputText value="#{location.RTP}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerPreu}" style="text-align:center" width="60">
+											<f:facet name="header">
+												<h:outputText value="Preu" />
+											</f:facet>
+											<h:outputText value="#{location.PREU}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footer05Aams}" style="text-align:center" width="60">
+											<f:facet name="header">
+												<h:outputText value="0,5% AAMS" />
+											</f:facet>
+											<h:outputText value="#{location.AMMS05p}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footer03Aams}" style="text-align:center" width="60">
+											<f:facet name="header">
+												<h:outputText value="0,3% AAMS" />
+											</f:facet>
+											<h:outputText value="#{location.AMMS03p}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerPreuAndAamsFee}" style="text-align:center" width="110">
+											<f:facet name="header">
+												<h:outputText value="Preu and AAMS fee" />
+											</f:facet>
+											<h:outputText value="#{location.PREUAMMSfee}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerTotalHouseWin}" style="text-align:center" width="100">
+											<f:facet name="header">
+												<h:outputText value="Total House Win" />
+											</f:facet>
+											<h:outputText value="#{location.totalHouseWin}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerQuotaTerziIncaricati}" style="text-align:center" width="120">
+											<f:facet name="header">
+												<h:outputText value="Quota Terzi Incaricati" />
+											</f:facet>
+											<h:outputText value="#{location.retQuotaGestore}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerQuotaHwSupplier}" style="text-align:center" width="110">
+											<f:facet name="header">
+												<h:outputText value="Quota HW Supplier" />
+											</f:facet>
+											<h:outputText value="#{location.retQuotaSupplier}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerQuotaHwBplus}" style="text-align:center" width="100">
+											<f:facet name="header">
+												<h:outputText value="Quota HW BPlus" />
+											</f:facet>
+											<h:outputText value="#{location.quotaHWBPlus}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerAvgNetWLforVltforDay}" style="text-align:center" width="220">
+											<f:facet name="header">
+												<h:outputText
+													value="AVG Net Win/L for installed vlt's for day" />
+											</f:facet>
+											<h:outputText value="#{location.avgNWPerMachine}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerCurrentVltNovomatic}" style="text-align:center" width="120">
+											<f:facet name="header">
+												<h:outputText value="Current Vlt Novomatic" />
+											</f:facet>
+											<h:outputText value="#{location.m1}" />
+										</p:column>
+										<p:column footerText="#{summaryManagedBean.footerCurrentVltInspired}" style="text-align:center;" width="110">
+											<f:facet name="header">
+												<h:outputText value="Current Vlt Inspired" />
+											</f:facet>
+											<h:outputText value="#{location.m2}" />
+										</p:column>
+
+									</p:dataTable>
+									
+								</h:form>
+	
+							</div>
+	
+							<div class="slidePortal" id="slide2">
+	
+									<ul id="Plus">
+										<li><a id="link_buttonplus" href="#"><div id="buttonPlus"></div></a>
+											<ul>
+												<li><a href="#">GRAPHIC</a></li>
+												<li><a href="#">CR. WAGERED TREND</a></li>
+												<li><a href="#">RESULTS BY VLT</a></li>
+												<li><a href="#">RESULTS BY DATE</a></li>
+												<li><a href="#">VLT'S ZEROS CREDITS WAGERED</a></li>
+												<li><a href="#">CASINO TREND</a></li>
+												<li><a href="#">DISABLED VLT'S</a></li>
+												<li><a href="#">RESULTS BY MANUFACTURER</a></li>
+											</ul>
+										</li>
+									</ul>
+									
+									<p:pieChart id="pieChart"
+										value="#{summaryPieChartBean.pieModel}"
+										legendPosition="ne"
+										style="
+											width:35%;
+											float:left;"
+									/>
+	
+									<p:lineChart id="linearChart"
+										value="#{summaryLineChartBean.linearModel}"
+										legendPosition="se"
+										minY="0"
+										maxY="10"
+										style="
+											width:60%;
+											float:right;
+											margin-left:-20px;"
+									/>
+									
+									<p:barChart id="barChart"
+										value="#{summaryBarChartBean.categoryModel}"
+										legendPosition="ne"
+										min="0"
+										max="200"
+										style="
+											width:98%;
+											height:300px;
+											float:left;"
+									/>
+	
+							</div>
+	
+						</p:layoutUnit>
+	
+					</center>
+				
+				</p:layout>
+	
+			</p:layoutUnit>
+	
+			<p:layoutUnit position="south" size="65">
+				<p:dock itemWidth="55">
+					<p:menuitem value="Summary" icon="../resources/images/summary.png" url="summary.xhtml" />
+					<p:menuitem value="Detailed" icon="../resources/images/detailed.png" url="#" />
+					<p:menuitem value="GS Detailed" icon="../resources/images/detailed for game system.png" url="#" />
+					<p:menuitem value="Trend" icon="../resources/images/trend.png" url="#" />
+					<p:menuitem value="Network Bplus" icon="../resources/images/network bplus.png" url="#" />
+					<p:menuitem value="Accounting" icon="../resources/images/accounting.png" url="#" />
+					<p:menuitem value="Garrison" icon="../resources/images/garrison.png" url="#" />
+				</p:dock>
+			</p:layoutUnit>
+	
+		</p:layout>
+		
+	</h:body>
+
+</html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 
+   xmlns="http://www.w3.org/1999/xhtml"  
+   xmlns:h="http://java.sun.com/jsf/html"  
+   xmlns:p="http://primefaces.org/ui"
+   xmlns:f="http://java.sun.com/jsf/core"
+   xmlns:ui="http://java.sun.com/jsf/facelets"
+   >  
+	<h:head>  		
+    	<h:outputScript name="jquery.maximage.js" library="javascript" />
+    	<title>Web Reporting Intranet</title>
+    	
+    	<script type="text/javascript">
+	    	$(document).ready(function() { 
+		    	jQuery('img.slidemaximage').maxImage
+					({
+					isBackground: true,
+					slideShow: true,
+					slideShowTitle: false,
+					slideDelay: 4, //secondi
+					maxFollows: 'height',
+					resizeMsg: {show: false}
+					});	
+	    	});
+    	</script>
+    
+    </h:head>  
+    
+    <f:view locale="#{languageBean.locale}" />
+    
+    <h:body onload="dlg.show()"> 
+      
+		<h:form id="loginForm" prependId="false">
+		
+			<p:growl id="msgs" showDetail="true" redisplay="false" life="15000" />    		
+			
+			<p:dialog
+				header="Enter credentials to access"
+				modal="true"
+				showEffect="fade"
+				hideEffect="fade"
+				widgetVar="dlg"
+				resizable="false"
+				closable="false"
+				draggable="false"
+			> 
+				<h:panelGrid columns="2" id="grid">
+					<h:outputText value="Username: " id="username" /><p:inputText value="#{loginBean.username}" tabindex="1"></p:inputText>
+					<h:outputText value="Password: "/><p:password value="#{loginBean.password}" tabindex="2"></p:password>
+				</h:panelGrid>
+				<h:panelGrid columns="2" style="float:right"> 
+					<p:commandButton value="Reset" action="#{loginBean.reset}" tabindex="4"/>
+					<p:commandButton value="Login" action="#{loginBean.login}" ajax="true" update="msgs" tabindex="3"/>
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+		
+		<center>
+		
+ 		<p:media value="/resources/media/loginAWG.swf" width="800" height="600" player="flash">  
+	    	<f:param name="autoPlay" value="true" /> 
+	    	<f:param name="wmode" value="transparent" /> 
+		</p:media>
+		</center>
+		
+		<img class="loader" src="resources/images/loading.gif" style="z-index: -10"/>  
+		<img class="slidemaximage" src="resources/images/back1.jpg" style="z-index: -10" />
+		<img class="slidemaximage" src="resources/images/back2.jpg" style="z-index: -10" />  
+		<img class="slidemaximage" src="resources/images/back3.jpg" style="z-index: -10" />  
+		<img class="slidemaximage" src="resources/images/back4.jpg" style="z-index: -10" />
+	
+    </h:body> 
+</html>
