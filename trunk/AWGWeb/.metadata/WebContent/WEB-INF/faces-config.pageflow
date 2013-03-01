@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13336355072670" configfile="/WebReportingIntra/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="*" x="122" y="370" id="pf13391502152390" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf13391502152391 pf13391502152392 pf13391502152393" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="index.xhtml" x="338" y="178" id="pf13391502152394" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf13391502152391" path="/index.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/home.xhtml" x="338" y="562" id="pf13391502152395" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf13391502152392" path="/pages/home.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/presidio/sale_distante.xhtml" id="pf13391502152396" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf13391502152393" path="/pages/presidio/sale_distante.xhtml"/>
+  <links id="pf13391502152391" target="pf13391502152394" source="pf13391502152390" outcome="index" redirect="true"/>
+  <links id="pf13391502152392" target="pf13391502152395" source="pf13391502152390" outcome="home" redirect="true"/>
+  <links id="pf13391502152393" target="pf13391502152396" source="pf13391502152390" outcome="sale_distante" redirect="true"/>
+</pageflow:Pageflow>

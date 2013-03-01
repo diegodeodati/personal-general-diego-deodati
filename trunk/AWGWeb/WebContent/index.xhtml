@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    >  
+    
+	<h:head>  		
+  		<script type="text/javascript"> 
+  			function sendAction(value) { 
+  				window.location = value;			
+  			} 
+  		</script>
+  		<h:outputStylesheet name="style.css" library="css" />
+  		
+  		<title>#{msgs.title} - #{msgs.label_indexCaption}</title>
+    </h:head>  
+    
+    <f:view locale="#{languageBean.locale}" />
+      
+    <h:body>  
+       
+      	<div id="wrapperLogin">
+      	
+      		<div id="logoLogin"><img src="images/logo.png" /></div>
+      			
+      		<div id="contentLogin">
+
+	     		<h:form id="loginForm" prependId="false">  
+	     			
+	     			<p:messages id="msgs" showDetail="true" />
+	     			
+	     			<p:panel header="#{msgs.label_indexCaption}" style="width: 400px;">
+	     				<p:focus context="panelUser" for="username" /> 
+	     				
+	     				<h:panelGrid id="panelLogin" columns="2" cellpadding="1" styleClass="panelGridLoginClass" columnClasses="columnLabelLogin,columnContentLogin">						
+   							<h:outputLabel value="#{msgs.label_language}" />     
+							<h:selectOneMenu id="languageType" value="#{languageBean.selectedLanguage}" styleClass="customSelectField" >
+								<f:selectItems value="#{languageBean.languages}" />	
+								<f:ajax listener="#{languageBean.changeLanguage}" render="loginForm" />	
+							</h:selectOneMenu>
+   							<h:outputLabel for="#{loginBean.username}" value="#{msgs.label_username}" />      									
+							<h:inputText id="username" value="#{loginBean.username}" label="Username" size="25" styleClass="customSelectField" />	
+							<h:outputLabel for="#{loginBean.password}" value="#{msgs.label_password}" />      									
+							<h:inputSecret id="password" value="#{loginBean.password}" label="Password" size="25" styleClass="customSelectField" />					
+	     				</h:panelGrid>
+	     				
+	     				<f:facet name="footer">  
+			                <p:commandButton value="#{msgs.label_loginButton}" update="msgs" action="#{loginBean.login}" styleClass="footerButtonSingle" ajax="true" />  
+			            </f:facet>  
+	     			</p:panel>
+					
+				</h:form>  
+				
+      		</div>
+      
+      	</div>
+      
+    </h:body>  
+    
+</html>

@@ -1,0 +1,57 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    >
+	<p:fieldset legend="#{msgs.label_filtri_ricerca}" toggleable="true"
+		toggleSpeed="500">
+		<p:ajax event="toggle" listener="#{fieldsetBean.handleToggle}" />
+		<h:panelGrid id="panelTopCommand" columns="10" cellpadding="1"
+			styleClass="panelGridClassBig" columnClasses="columnButtons">
+			<h:panelGroup style="float: left; width: 1000px;" >
+				<h:outputText value="#{msgs.label_datada}: " />
+				<p:calendar id="dateStart" effect="slideDown" size="12"
+					navigator="true" lang="it" timeZone="CET" value="#{filterBean.startDate}"
+					pattern="dd/MM/yyyy" mindate="01/09/2010"
+					maxdate="#{filterBean.nowDate}">
+					<p:ajax event="dateSelect" listener="#{filterBean.changeStartDate}" update="updateButton" />
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</p:calendar>
+				<h:outputText value=" #{msgs.label_dataa}: " />
+				<p:calendar id="dateEnd" effect="slideDown" size="12"
+					navigator="true" lang="it" timeZone="CET" value="#{filterBean.endDate}"
+					pattern="dd/MM/yyyy" mindate="01/09/2010"
+					maxdate="#{filterBean.nowDate}">
+						<p:ajax event="dateSelect" listener="#{filterBean.changeEndDate}" update="updateButton" />
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+				</p:calendar>
+				<h:outputText value=" #{msgs.label_sistemagioco}: " />
+	 	        <h:selectOneMenu value="#{filterBean.idManufacture}"  styleClass="customSelectField">  
+		           	<f:selectItem itemLabel="Tutti" itemValue="0" />  
+	 	           	<f:selectItem itemLabel="Inspired" itemValue="1711000065" />  
+					<f:selectItem itemLabel="Novomatic" itemValue="1711000045" />
+				</h:selectOneMenu>
+				<h:outputText value=" #{msgs.label_pagerecordnumber}: " />
+	 	        <h:selectOneMenu value="#{filterBean.nrecordperpagina}"  styleClass="customSelectField">  
+		           	<f:selectItem itemLabel="20" itemValue="20" />
+					<f:selectItem itemLabel="50" itemValue="50" />  
+					<f:selectItem itemLabel="100" itemValue="100" />  
+					<f:selectItem itemLabel="200" itemValue="200" />  
+					<f:selectItem itemLabel="500" itemValue="500" />  
+					<f:selectItem itemLabel="1000" itemValue="1000" />
+				</h:selectOneMenu>
+				<!--  <p:commandButton id="resetButton" actionListener="#{updateFirmwareBean.resetUpdateForm}" update="pageForm,pageTable" immediate="true" value="#{msgs.btn_reset}" styleClass="uploadButton" process="@this" onclick="firmUpdTable.clearFilters()"  />-->
+				<p:commandButton id="updateButton"
+					actionListener="#{generalFilterBean.filterTable}" disabled="#{filterBean.errorDate}" update="msgs,pageForm"
+					value="#{msgs.btn_sendUpdate}" styleClass="uploadButton" stule="float: left;" />
+				<h:commandLink>
+					<p:graphicImage value="/images/excel.png" style="top: 11px; position: relative; border: 0;" />
+					<p:dataExporter type="xls" target="pageTable" fileName="#{generalFilterBean.xlsName}" postProcessor="#{generalFilterBean.excelExporter.postProcessXLS}" />
+				</h:commandLink>
+			</h:panelGroup>
+		</h:panelGrid>
+	</p:fieldset>
+    <br />
+</ui:composition>
