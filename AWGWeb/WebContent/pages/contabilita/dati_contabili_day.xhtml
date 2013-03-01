@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    >  
+    
+    <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+    
+	<h:head>  
+	
+		<h:outputStylesheet name="style_perc.css" library="css" /> 		
+  		<h:outputStylesheet name="webreporting.css" library="css" />
+  		<script type="text/javascript"> 
+  			function sendAction(value) { 
+  				window.location = value;			
+  			} 
+  		</script>
+    	<title>#{msgs.title} - #{msgs.label_day_data}</title>
+    </h:head>  
+      
+    <f:view locale="#{languageBean.locale}" />
+      
+    <h:body>
+    	
+      	<div id="wrapper">
+      	
+	     	<ui:include src="../common/top.xhtml"/>
+      
+      		<div id="content">
+      		
+      			<ui:include src="../common/menu.xhtml"/>
+      		
+      			<div id="content_page">
+      			
+      				<center>
+					    <p:panel header="#{msgs.label_day_data}" style="width: 99%;margin-left:3px;" >
+					       						
+							<h:form id="pageForm" prependId="false" >	
+								
+								<p:messages id="msgs" showDetail="true" globalOnly="true"/>
+								
+								#{generalFilterBean.excelExporter.setNotNumericColumns('1|2')}
+								#{generalFilterBean.excelExporter.setColumnCut('2')}
+								<ui:include src="../common/filtri_ricerca.xhtml"/>					
+												
+								#{locationDataTableBean.setGroupByDate(true)}
+		
+      							<div class="bottom_content">
+   									<p:dataTable 
+											 id ="pageTable" 
+											 widgetVar="locationDataTable"
+											 var="location_data" 
+											 value="#{locationDataTableBean.tableList}"
+							                 paginator="true" 
+							                 rows="#{filterBean.nrecordperpagina}"  
+						                 	 paginatorAlwaysVisible="false"
+							            >
+   									
+								        <p:column styleClass="leftText cell" filterBy="#{location_data.datafecham}" filterMatchMode="contains" sortBy="#{location_data.datafecham}" >          
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_datafecham}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.datafecham}"><f:convertDateTime pattern="dd/MM/yyyy" timeZone="CET" locale="IT" /></h:outputText>
+								        </p:column>  
+								        <p:column styleClass="rightText cell">        
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_bet}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.bet}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>  
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_win}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.win}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_gamesplayed}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.gamesplayed}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_totalin}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.totalin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_totalout}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.totalout}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_ticketin}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.ticketin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_ticketout}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.ticketout}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_coinin}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.coinin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_billin}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.billin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_cardin}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.cardin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_totalprepaidin}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.totalprepaidin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_jackpotwins}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.jackpotwins}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_jackpotcontribution}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.jackpotcontribution}"><f:convertNumber pattern="#,##0.00"/></h:outputText>  
+								        </p:column>  
+								        
+								    </p:dataTable>  
+								    							
+								</div>    
+							</h:form>
+					        
+					    </p:panel>    
+					 </center>
+	
+      			</div>
+      			
+      		</div>
+      
+      	</div>
+      
+    </h:body>  
+    
+</html>

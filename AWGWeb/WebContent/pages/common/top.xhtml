@@ -1,0 +1,27 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    >
+    
+   	<div id="header">     	
+    	<div id="logo">
+			<img src="/WebReportingIntra/resources/images/logoPage.png" />
+		</div>  
+		<h:form id="roleForm" prependId="false">
+			<div id="userInfo">
+				<div id="userInfoRow1">
+					<b>DATA AGGIORNAMENTO</b>
+					Inspired: #{topBean.getDataManufacture('1711000065')} - 
+					Novomatic: #{topBean.getDataManufacture('1711000045')}
+				</div>
+				<div id="userInfoRow2" style="float: right; padding-bottom: 5px;">
+					<div style="align: right;"><b>#{msgs.label_loggedUser}:</b> #{loginBean.username}</div>
+				</div>
+			</div>
+		</h:form>
+    </div>
+    
+</ui:composition>

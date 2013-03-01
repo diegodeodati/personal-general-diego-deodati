@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    >  
+    
+    <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+    
+	<h:head>   	
+	
+		<h:outputStylesheet name="style_perc.css" library="css" />	
+		<h:outputStylesheet name="webreporting.css" library="css" />
+  		<script type="text/javascript"> 
+  			function sendAction(value) { 
+  				window.location = value;			
+  			} 
+  		</script>
+    	<title>#{msgs.title} - #{msgs.label_fee_insp}</title>
+    </h:head>  
+      
+    <f:view locale="#{languageBean.locale}" />
+      
+    <h:body>
+      
+      	<div id="wrapper">
+      	
+	     	<ui:include src="../common/top.xhtml"/>
+      
+      		<div id="content">
+      			
+      			<ui:include src="../common/menu.xhtml"/>
+      		
+      			<div id="content_page">
+      			
+      				<center>
+					     <p:panel header="#{msgs.label_fee_insp}" style="width: 99%;margin-left:3px;" >
+					       						
+							<h:form id="pageForm" prependId="false" >	
+								
+								<p:messages id="msgs" showDetail="true" globalOnly="true"/>
+								
+								#{generalFilterBean.excelExporter.setNotNumericColumns('1|2')}
+								#{generalFilterBean.excelExporter.setColumnCut('2')}
+								<ui:include src="../common/filtri_ricerca.xhtml"/>					
+		
+      							<div class="bottom_content">	
+									<p:dataTable 
+											 id ="pageTable" 
+											 widgetVar="feeInspTable"
+											 var="fee" 
+											 value="#{feeTableBean.tableList}"
+							                 paginator="true" 
+							                 rows="#{filterBean.nrecordperpagina}"  
+						                 	 paginatorAlwaysVisible="false"
+							            >  
+      								
+								        <p:column styleClass="leftText cell" filterBy="#{fee.aamsvltid}" filterMatchMode="contains" sortBy="#{fee.aamsvltid}" >          
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_aamsvltid}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{fee.aamsvltid}" />  
+								        </p:column>  
+								        <p:column styleClass="leftText cell" filterBy="#{fee.cabinet}" filterMatchMode="exact" sortBy="#{fee.cabinet}" >          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_cabinet}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{fee.cabinet}" />  
+								        </p:column>
+								        <p:column styleClass="rightText cell">        
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_bet}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{fee.bet}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>  
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_win}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{fee.win}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>  
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_jackpotcontribution}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{fee.jackpotcontribution}"><f:convertNumber pattern="#,##0.00"/></h:outputText>  
+								        </p:column>  
+								        <p:column styleClass="rightText cell" sortBy="#{fee.jackpotwins}">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_jackpotwins}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{fee.jackpotwins}"><f:convertNumber pattern="#,##0.00"/></h:outputText>  
+								        </p:column>  
+								        
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_netwin}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{fee.netwin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>  
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_totalhousewin}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{fee.totalhousewin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>  
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_feeperc}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{fee.feeperc}"><f:convertNumber pattern="#,##0.000"/></h:outputText>
+								        </p:column>  
+								        <p:column styleClass="rightText cell">              
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_ricavoinspired}" styleClass="centerText cell" /></f:facet>
+								            <h:outputText value="#{fee.ricavoinspired}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								    </p:dataTable>  
+								    							    										
+								</div>
+									<p:panel id="pnl" header="#{msgs.label_totali}" style="text-align: left; width: 99%;">  
+									    <h:outputText value="#{msgs.column_bet}: " />
+									    <h:outputText value="#{feeTableBean.totBet}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+									    <h:outputText value=" - #{msgs.column_win}: " />
+									    <h:outputText value="#{feeTableBean.totWin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+									    <h:outputText value=" - #{msgs.column_jackpotcontribution}: " />
+									    <h:outputText value="#{feeTableBean.totContJakpot}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+									    <h:outputText value=" - #{msgs.column_netwin} " />
+									    <h:outputText value="#{feeTableBean.totNetWin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+									    <h:outputText value=" - #{msgs.column_totalhousewin}: " />
+									    <h:outputText value="#{feeTableBean.totHouseWin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+									    <h:outputText value=" - #{msgs.column_feeperc}: " />
+									    <h:outputText value="#{feeTableBean.totFeePerc}"><f:convertNumber pattern="#,##0.000"/></h:outputText>
+									    <h:outputText value=" - #{msgs.column_ricavoinspired}: " />
+									    <h:outputText value="#{feeTableBean.totRicavoInspired}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+									</p:panel>  
+									<p:resizable for="pnl" containment="true"/>
+									<p:draggable for="pnl" />    
+							</h:form>
+					        
+					    </p:panel>    
+					 </center>
+	
+      			</div>
+      			
+      		</div>
+      
+      	</div>
+      
+    </h:body>  
+    
+</html>

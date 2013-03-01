@@ -1,0 +1,39 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    >
+    
+   	<div id="top_menu">
+    	<h:form>
+    	  <p:toolbar>  
+		    <p:toolbarGroup align="left">  
+		    	<p:menuButton value="#{msgs.menu_contabilita}" rendered="#{loginBean.loggedUser.isRolePresent('Admin,Contabilita,Preu')}">
+		    		<p:menuitem value="#{msgs.menu_fee_insp}" rendered="#{loginBean.loggedUser.isRolePresent('Admin,Preu')}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/contabilita/compensi_inspired.xhtml');" />
+			        <p:menuitem value="#{msgs.menu_vlt_insp}" rendered="#{loginBean.loggedUser.isRolePresent('Admin,Preu')}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/contabilita/vlt_inspired.xhtml');" />
+			        <p:menuitem value="#{msgs.menu_dati_contabili}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/contabilita/dati_contabili_sala.xhtml');" />
+					<p:menuitem value="#{msgs.menu_dati_contabili_day}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/contabilita/dati_contabili_day.xhtml');" />
+			    	<p:menuitem value="#{msgs.menu_vlt_jackpot_win}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/presidio/vlt_jackpot_win.xhtml');"  />
+			    </p:menuButton>   
+			    <p:separator />
+			    <p:menuButton value="#{msgs.menu_presidio}" rendered="#{loginBean.loggedUser.isRolePresent('Admin,Presidio')}">
+		    		<!-- <p:menuitem value="#{msgs.menu_dati_contabili}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/presidio/dati_contabili_sala.xhtml');" /> -->
+		    		<p:menuitem value="#{msgs.menu_dati_contabili_day}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/contabilita/dati_contabili_day.xhtml');" />
+		    		<p:menuitem value="#{msgs.menu_distante_bet_win}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/presidio/bet_win.xhtml');"  />
+		    		<p:menuitem value="#{msgs.menu_distante_bet_win_distante}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/presidio/bet_win_distante.xhtml');"  />
+		    		<p:menuitem value="#{msgs.menu_vlt_milionarie}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/presidio/vlt_milionarie.xhtml');"  />
+		    		<p:menuitem value="#{msgs.menu_vlt_jackpot_win}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/presidio/vlt_jackpot_win.xhtml');"  />
+		    		<p:menuitem value="#{msgs.menu_distante_location}" icon="ui-icon-arrowreturnthick-1-s" url="#" onclick="sendAction('/WebReportingIntra/pages/presidio/sale_distante.xhtml');"  />
+			    </p:menuButton>			    
+		    </p:toolbarGroup>   	
+		  	<p:toolbarGroup align="right">  
+				<p:commandButton type="push" action="#{loginBean.logout}" value="#{msgs.label_logout}" process="@this" ajax="false" />
+			</p:toolbarGroup>	 
+		  </p:toolbar> 
+		 
+		</h:form>  
+	</div>		
+    
+</ui:composition>

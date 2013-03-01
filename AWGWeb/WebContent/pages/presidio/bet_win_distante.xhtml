@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    >  
+    
+    <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+    
+	<h:head>   		
+	
+		<h:outputStylesheet name="style_perc.css" library="css" />
+  		<h:outputStylesheet name="webreporting.css" library="css" />
+  		<script type="text/javascript"> 
+  			function sendAction(value) { 
+  				window.location = value;			
+  			}
+
+  			function CopyToClipboard(text) {
+  				$.copy("some text to copy");
+  			}
+  			
+  			function highlightmetasearch() {
+  				document.pageForm.txtMail.select(); 
+  				document.pageForm.txtMail.focus();
+  			}
+  			
+  			function copymetasearch() {
+  				highlightmetasearch();
+  			}
+  		</script>
+  		
+    	<title>#{msgs.title} - #{msgs.label_location_data}</title>
+    </h:head>  
+      
+    <f:view locale="#{languageBean.locale}" />
+      
+    <h:body>
+    	
+      	<div id="wrapper">
+      	
+	     	<ui:include src="../common/top.xhtml"/>
+      
+      		<div id="content">
+      		
+      			<ui:include src="../common/menu.xhtml"/>
+      		
+      			<div id="content_page">
+      			
+      				<center>
+					    <p:panel header="#{msgs.label_bet_win_distante}" style="width: 99%;margin-left:3px;" >
+					       						
+							<h:form id="pageForm" prependId="false" >	
+								
+								<p:messages id="msgs" showDetail="true" globalOnly="true"/>
+								
+								#{generalFilterBean.excelExporter.setNotNumericColumns('1|2')}
+								#{generalFilterBean.excelExporter.setColumnCut('2')}
+								<ui:include src="../common/filtri_ricerca.xhtml"/>					
+												
+								#{locationDataTableBean.setGroupByDate(false)}
+								#{locationDataTableBean.setDistante(true)}
+		
+      							<div class="bottom_content">
+   									<p:dataTable 
+											 id ="pageTable" 
+											 widgetVar="locationDataTable"
+											 var="location_data" 
+											 value="#{locationDataTableBean.tableList}"
+							                 paginator="true" 
+							                 rows="#{filterBean.nrecordperpagina}"  
+						                 	 paginatorAlwaysVisible="false"
+							            >
+								        <p:column styleClass="leftText cell" filterBy="#{location_data.aamslocationname}" filterMatchMode="contains" sortBy="#{location_data.aamslocationname}" >          
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_aamslocationname}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.aamslocationname}" />  
+								        </p:column>  
+								        <p:column styleClass="leftText cell" filterBy="#{location_data.aamslocationid}" filterMatchMode="contains" sortBy="#{location_data.aamslocationid}" >          
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_aamslocationid}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.aamslocationid}" />  
+								        </p:column>
+								        <p:column styleClass="leftText cell" filterBy="#{location_data.aamscity}" filterMatchMode="contains" sortBy="#{location_data.aamscity}" >          
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_aamscity}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.aamscity}" />  
+								        </p:column>
+								        <p:column styleClass="leftText cell" filterBy="#{location_data.aamsprovince}" filterMatchMode="contains" sortBy="#{location_data.aamsprovince}" >          
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_aamsprovince}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.aamsprovince}" />  
+								        </p:column>    
+								        <p:column styleClass="rightText cell">        
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_bet}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.bet}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>  
+								        <p:column styleClass="rightText cell">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_win}" styleClass="centerText cell" /></f:facet>  
+								            <h:outputText value="#{location_data.win}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+								        </p:column>
+								        
+								    </p:dataTable>  
+								    							
+								</div> 
+								
+								#{locationDataTableBean.setMode(3)}   
+								<p:panel id="pnl" header="TESTO MAIL" style="text-align: left; width: 99%;">  
+								    <h:panelGrid id="panelMail" columns="1" cellpadding="1" styleClass="panelGridClassBig" style="width: 98%;">
+										<h:inputTextarea rows="6" style="width: 100%; overflow: auto; height: 90px;" id="txtMail" value="#{locationDataTableBean.testoMail}" lang="it_IT"  />
+										<br />
+										<p:commandButton id="updateButton2" type="button" value="Seleziona testo" name="sele" style="width: 100%; align: center;" onclick="copymetasearch();" />				  
+									</h:panelGrid>
+								</p:panel>    
+							</h:form>
+					        
+					    </p:panel>    
+					 </center>
+	
+      			</div>
+      			
+      		</div>
+      
+      	</div>
+      
+    </h:body>  
+    
+</html>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    >  
+    
+    <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+    
+	<h:head>   		
+	
+		<h:outputStylesheet name="style_perc.css" library="css" />
+  		<h:outputStylesheet name="webreporting.css" library="css" />
+  		<script type="text/javascript"> 
+  			function sendAction(value) { 
+  				window.location = value;			
+  			} 
+  		</script>
+    	<title>#{msgs.title} - #{msgs.label_vlt_insp}</title>
+    </h:head>  
+      
+    <f:view locale="#{languageBean.locale}" />
+      
+    <h:body>
+    	
+      	<div id="wrapper">
+      	
+	     	<ui:include src="../common/top.xhtml"/>
+      
+      		<div id="content">
+      		
+      			<ui:include src="../common/menu.xhtml"/>
+      		
+      			<div id="content_page">
+      			
+      				<center>
+					     <p:panel header="#{msgs.label_vlt_insp}" style="width: 99%;margin-left:3px;" >
+					       						
+							<h:form id="pageForm" prependId="false" >	
+								
+								<p:messages id="msgs" showDetail="true" globalOnly="true"/>
+								
+								#{generalFilterBean.excelExporter.setNotNumericColumns('1|2|4|5|6')}
+								#{generalFilterBean.excelExporter.setColumnCut('2')}
+								<ui:include src="../common/filtri_ricerca.xhtml"/>					
+		
+      							<div class="bottom_content">
+   									<p:dataTable 
+											 id ="pageTable" 
+											 widgetVar="vltInspTable"
+											 var="vlt" 
+											 value="#{vltTableBean.tableList}"
+							                 paginator="true" 
+							                 rows="#{filterBean.nrecordperpagina}"  
+						                 	 paginatorAlwaysVisible="false"
+							            >
+								        <p:column styleClass="leftText" filterBy="#{vlt.aamsvltid}" filterMatchMode="contains" sortBy="#{vlt.aamslocationid}" >          
+               							    <f:facet name="header" ><h:outputText value="#{msgs.column_aamsvltid}" styleClass="centerText" /></f:facet>  
+								            <h:outputText value="#{vlt.aamsvltid}" />  
+								        </p:column>  
+								        <p:column styleClass="leftText" filterBy="#{vlt.cabinet}" filterMatchMode="exact" sortBy="#{vlt.cabinet}" >          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_cabinet}" styleClass="centerText" /></f:facet>  
+								            <h:outputText value="#{vlt.cabinet}" />  
+								        </p:column>
+								        <p:column styleClass="rightText">          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_feeperc}" styleClass="centerText" /></f:facet>  
+								            <h:outputText value="#{vlt.feePerc}"><f:convertNumber pattern="#,##0.000"/></h:outputText>
+								        </p:column> 
+								        <p:column styleClass="leftText" filterBy="#{vlt.aamslocationid}" filterMatchMode="contains" sortBy="#{vlt.aamslocationid}" >          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_aamslocationid}" styleClass="centerText" /></f:facet>  
+								            <h:outputText value="#{vlt.aamslocationid}" />  
+								        </p:column>
+								        <p:column styleClass="leftText" filterBy="#{vlt.aamslocationname}" filterMatchMode="contains" sortBy="#{vlt.aamslocationname}" >          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_aamslocationname}" styleClass="centerText" /></f:facet>  
+								            <h:outputText value="#{vlt.aamslocationname}" />  
+								        </p:column>
+								        <p:column styleClass="leftText" filterBy="#{vlt.aamscity}" filterMatchMode="contains" sortBy="#{vlt.aamscity}" >          
+								            <f:facet name="header" ><h:outputText value="#{msgs.column_aamscity}" styleClass="centerText" /></f:facet>  
+								            <h:outputText value="#{vlt.aamscity}" />  
+								        </p:column> 
+								    </p:dataTable>  
+								    							
+								</div>    
+							</h:form>
+					        
+					    </p:panel>    
+					 </center>
+	
+      			</div>
+      			
+      		</div>
+      
+      	</div>
+      
+    </h:body>  
+    
+</html>

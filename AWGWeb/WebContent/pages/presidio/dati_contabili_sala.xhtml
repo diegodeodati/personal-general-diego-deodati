@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    >  
+    
+    <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+    
+	<h:head>   		
+	
+  		<h:outputStylesheet name="style_perc.css" library="css" />	
+		<h:outputStylesheet name="webreporting.css" library="css" />
+  		<script type="text/javascript"> 
+  			function sendAction(value) { 
+  				window.location = value;			
+  			} 
+  		</script>
+    	<title>#{msgs.title} - #{msgs.label_data_insp}</title>
+    </h:head>  
+      
+    <f:view locale="#{languageBean.locale}" />
+      
+    <h:body>
+    	
+      	<div id="wrapper">
+      	
+	     	<ui:include src="../common/top.xhtml"/>
+      
+      		<div id="content">
+      		
+      			<ui:include src="../common/menu.xhtml"/>
+      		
+      			<div id="content_page">
+      			
+      				<center>
+					     <p:panel header="#{msgs.label_fee_insp}" style="width: 99%;margin-left:3px;" >
+					       						
+							<h:form id="pageForm" prependId="false" >	
+								
+								<p:messages id="msgs" showDetail="true" globalOnly="true"/>
+								
+								#{generalFilterBean.excelExporter.setNotNumericColumns('1|2')}
+								#{generalFilterBean.excelExporter.setColumnCut('2')}
+								<ui:include src="../common/filtri_ricerca.xhtml"/>	
+      							
+      							<div class="bottom_content">
+   									<p:dataTable 
+											 id ="pageTable" 
+											 widgetVar="locationDataTable"
+											 var="location_data" 
+											 value="#{locationVltDataTableBean.tableList}"
+							                 paginator="true" 
+							                 rows="#{filterBean.nrecordperpagina}"  
+						                 	 paginatorAlwaysVisible="false"
+							            >
+							            
+								        <p:columnGroup type="header">  
+								            <p:row>  
+								                <p:column headerText="#{msgs.column_aamslocationid}" styleClass="centerText cell" filterBy="#{location_data.aamslocationname}" filterMatchMode="contains" sortBy="#{location_data.aamslocationname}"/>
+								                <p:column headerText="#{msgs.column_bet}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_win}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_gamesplayed}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_totalin}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_totalout}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_ticketin}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_ticketout}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_coinin}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_billin}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_cardin}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_totalprepaidin}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_jackpotwins}" styleClass="centerText cell" />
+								                <p:column headerText="#{msgs.column_jackpotcontribution}" styleClass="centerText cell" />
+								            </p:row>  
+									     </p:columnGroup>  
+								        <p:subTable var="vlt" value="#{location_data.vltList}">
+								        	<f:facet name="header" style="min-width: 500px !important;">  
+							              		  <h:outputText value="#{location_data.aamslocationname}&nbsp;-&nbsp;[#{location_data.aamslocationid}]" />   
+								            </f:facet>
+															        	
+								        	<p:column styleClass="cell">  
+							                	  #{vlt.aamsvltid}
+							            	</p:column>
+								        	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.bet}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.win}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.gamesplayed}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.totalin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.totalout}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.ticketin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.ticketout}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.coinin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.billin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.cardin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.totalprepaidin}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.jackpotwins}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+							            	<p:column styleClass="rightText cell">  
+							                	  <h:outputText value="#{vlt.jackpotcontribution}"><f:convertNumber pattern="#,##0.00"/></h:outputText>
+							            	</p:column>
+								        	
+								        	<p:columnGroup type="footer">  
+								                <p:row>  
+								                    <p:column/>
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.allbet)}" styleClass="rightText"  />  
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.allwin)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.allgamesplayed)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.alltotalin)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.alltotalout)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.allticketin)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.allticketout)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.allcoinin)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.allbillin)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.allcardin)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.alltotalprepaidin)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.alljackpotwins)}" styleClass="rightText" />
+								                    <p:column footerText="#{locationVltDataTableBean.getDecimalFormat('###,##0.00', location_data.alljackpotcontribution)}" styleClass="rightText" />
+								                </p:row> 
+								            </p:columnGroup> 
+																	        	        
+								        </p:subTable>
+								    </p:dataTable>  
+								    							
+								</div>    
+							
+							</h:form>
+					        
+					    </p:panel>    
+					 </center>
+	
+      			</div>
+      			
+      		</div>
+      
+      	</div>
+      
+    </h:body>  
+    
+</html>

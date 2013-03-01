@@ -1,0 +1,393 @@
+/* General CSS 
+   Author: RRossi
+   Date: 05/05/2012
+*/
+
+#wrapper {
+	clear: both;
+	width: 98%;
+	margin: 0 auto;
+	font-family: Verdana,Arial,sans-serif;
+}
+
+#wrapperLogin {
+	display:block;
+    /*set the div in the center of the screen*/
+    position:absolute;
+    top:25%;
+    left:38%;
+    text-align: center;
+}
+
+#header {	
+	margin: auto;
+	width: 98%;
+	/*height: 100px;*/
+}
+
+#contentLogin {
+    width:400px;
+}
+
+#content_title {
+	float: left;	
+	margin-top: 5px;
+    border: 1px solid #A6C9E2;
+	width: 940px;
+	text-align: left;
+	padding: 3px;
+	padding-left: 8px;
+	border-radius: 5px 5px 5px 5px;
+	color: #0078AE;
+	font-weight: bold;
+}
+
+#logo {
+	float: left;
+}
+
+#logoLogin {
+	margin-bottom: 10px;
+	padding-left: 40px;
+}
+
+#userInfo {
+	padding-top: 0px;
+	float: right;
+	font-size: 0.9em;
+	color: #A6C9E2;
+}
+
+#top_menu { 	
+	float: left;
+	width: 100%;
+	text-align: left;
+}
+
+#content_page {
+	float: left;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+#top_content {
+	float: left;
+	width: 930px;
+	margin-top: 5px;
+	margin-bottom: 10px;
+    border: 1px solid #A6C9E2;
+    padding-left: 10px;
+    padding-right: 10px;
+	border-radius: 5px 5px 5px 5px;
+	text-align: left; /* for IE alignment */
+}
+
+.left_content_column {
+	float: left;
+	width: 30%;
+	margin: 0px 5px 0px 0px;
+	padding: 0;
+}
+
+.left_content {
+	float: left;
+	margin-bottom: 5px;
+	width: 100%;
+	font-size: 0.8em !important;
+}
+
+.right_content {
+	float: left;
+	width: 68%;
+	margin-left: 1%;
+	margin-bottom: 1%;
+	font-size: 0.8em !important;
+/*	padding: 0 0 0 0;*/
+}
+
+.right_content_column {
+	height: 100%;
+}
+
+.noPadding {
+	padding:0;
+}
+
+.bottom_content {
+	float: left;
+	width: 940px;
+	margin-bottom: 15px;
+	padding-left: 5px;
+}
+
+.panelGridClass {
+	margin-top: 10px;
+	margin-left: 50px; 
+    width: 700px;
+}
+
+.panelGridClassBig {
+	margin-top: 10px;
+	margin-left: 10px; 
+	margin-bottom: 10px;
+    width: 720px;
+}
+
+.panelGridLoginClass {
+	margin-top: 10px;
+	margin-left: 0px; 
+    width: 400px;
+}
+
+.columnLabelBig {
+	width: 120px;
+}
+
+.columnContentBig {
+	width: 600px;
+}
+
+.columnButtons {
+	width: 920px;
+	text-align: right;
+	padding-right: 250px;
+}
+
+.columnLabel {
+	width: 160px;
+}
+
+.columnContent {
+	width: 340px;
+}
+
+.columnMsg {
+	width: 200px;
+}
+
+.columnButtonPassLeft {
+	width: 90%;
+}
+
+.columnButtonPassRight {
+	width: 30%;
+}
+
+.uploadButton {
+	margin-left: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.customSelectField {
+	border: 1px solid #77D5F7;
+	background: none repeat scroll 0 0 #FFFFFF;
+    box-shadow: 0 2px 2px #77D5F7 inset;
+    color: #026890;
+    font-size: 1em;
+    font-family: Verdana,Arial,sans-serif;
+    border-radius: 5px 5px 5px 5px;
+	margin: 0;
+    outline: medium none;
+    padding: 4px;
+}
+
+.columnTableSx {
+	width: 35%;
+	text-align: left;
+}
+
+.columnTableCenter {
+	width: 30%;
+	text-align: center;
+}
+
+.columnTableDx {
+	width: 35%;
+	text-align: right;
+}	
+	
+.centerText {
+	text-align: center;
+}
+
+.footerButtonSingle {
+	margin-left: 250px;
+}
+
+.columnLabelLogin {
+	width: 100px;	
+	text-align: right;
+	color: #026890;
+}
+
+.columnContentLogin {
+	padding-left: 20px;
+	width: 300px;
+	text-align: left;
+}
+
+.dialogCentered {
+	text-align: center;
+}
+
+.infoUnselect {
+	color: gray;
+	font-style: italic;
+	margin-bottom: 5px;
+}
+
+.tableCellGreen {
+	color: green;
+}
+
+.tableCellRed {
+	color: red;
+}
+
+.hiddenField {
+	visibility:hidden;
+	position:absolute;
+	top:0;
+	left:0
+}
+
+.columnWidth100 {
+	width: 35%;
+}
+
+.columnWidth100Grey {
+	width: 35%;
+	background-color: #F2F5F9;
+}
+
+.columnWidth300 {
+	width: 65%;
+}
+
+.columnWidth45Grey {
+	width: 45%;
+	background-color: #F2F5F9;
+	font-weight: bold;
+}
+
+.columnWidth55 {
+	width: 55%;
+}
+
+.rightAlignText {
+	text-align: right;
+}
+
+.spanIndication {
+	color: gray;
+	font-style: italic;
+	width: 100% !important;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.fontSizeLittle {
+	font-size: 0.8em !important;
+}
+
+#cashierForm:shiftTransactionTable {	
+	widht: 1024px;
+}
+
+.inputError {	border: 1px solid red !important;	
+}
+
+/* Override primefaces CSS */
+.ui-widget {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 0.8em;
+}
+
+.ui-panel-titlebar {
+	text-align: left;
+}
+
+.ui-panel {
+	float: left;
+}
+
+.uploadifyQueueItem {
+    background-color: #F5F5F5;
+    border: 2px solid #E5E5E5;
+    font: 11px Verdana,Geneva,sans-serif;
+    margin-top: 5px;
+    padding: 10px;
+    width: 350px;
+}
+
+.ui-widget select {
+	border: 1px solid #77D5F7;
+	background: none repeat scroll 0 0 #FFFFFF;
+    box-shadow: 0 2px 2px #77D5F7 inset;
+    color: #026890;
+    font-size: 1em;
+    font-family: Verdana,Arial,sans-serif;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.ui-datatable-data-empty {
+	text-align: center;
+	width: 100%;
+}
+
+.ui-datatable .ui-column-filter {
+    display: block;
+    margin: auto;
+    width: 100%;
+}
+
+.ui-dt-c {
+	text-align: center;
+}
+
+.ui-datatable.ui-datatable-resizable table {
+    width: 100%;
+}
+
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {
+    border: 1px solid #77D5F7;
+}
+
+.ui-datatable-data-empty td {
+    border-color: white !important;
+}  
+
+.ui-datatable-odd {
+    background: none repeat scroll 0 0 #F2F5F9;
+}
+
+.ui-menu {
+	width: 180px !important;
+}
+
+.ui-dialog .ui-dialog-content {
+	overflow: hidden !important;
+}
+	
+.ui-growl {
+	right: 25% !important;
+	top: 10% !important;
+	width: 50% !important;
+}
+
+.ui-growl-message {
+	width: 90% !important;
+}
+
+/* jQuery validation */
+#manForm input.error {
+	border: 1px solid #e77776;
+	box-shadow: 0 2px 2px #e77776 inset;
+}
+
+#manForm button.disabledButton {
+	border: 1px solid #e77776;
+	background: graytext;
+}
