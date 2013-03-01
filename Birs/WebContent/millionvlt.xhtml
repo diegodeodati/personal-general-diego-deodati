@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:p="http://primefaces.prime.com.tr/ui"  >
+	
+<h:head>
+	<title>Betplus Business Intelligence's Reports and Statistics
+		System</title>
+	
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+		  
+</h:head>
+<h:body >
+	
+ 		<ui:include src="/intestazione.xhtml" />
+	
+		<ui:include src="/menu.xhtml" />
+ 
+ 
+		<ice:panelGroup id="centerGraphVLTmil" styleClass="TabCenter">
+		<h:form id="gvform">
+	
+			<ice:outputText value="Report VLT Milionarie"
+				style="font-size: 14px; font-weight: bold; color: black;" />
+			<br />
+			
+						<br />
+			<ice:panelGroup id="pgro_vlt_mil_1">
+				<ice:panelGrid columns="2" id="pgrid_vlt_mil_1">
+					
+					<p:calendar id="date1" value="#{milVltTable.data1}" showOn="button"  pattern="dd/MM/yyyy" 
+						locale="it" mindate="01/09/2010" maxdate="#{seicentoTable.oggi}"/>
+
+					<h:commandButton value="OK"
+					style="font-size: 10px; width: 30; height: 25px; " lang="it"
+						actionListener="#{milVltTable.query}" />
+
+				</ice:panelGrid>
+			</ice:panelGroup>
+			<br />
+			<ice:outputText value="N.B.: vengono mostrate soltanto le VLT che hanno registrato un bet giornaliero superiore a € 15.000" style="font-size: 11px;" />
+			<br />
+
+
+
+			<ice:dataTable width="95%" id="lista_meter_vlt_mil" border="1"
+				resizable="true"
+				columnClasses="columnClass"
+				rowClasses="oddRow, evenRow" styleClass="tableStyle" rows="20"
+				value="#{milVltTable.meterList_vlt_table}" var="item">
+
+				<ice:column id="id_sala" groupOn="#{item.aams_location_id}">
+					<f:facet name="header">
+						<ice:outputText value="ID Sala" />
+					</f:facet>
+					<ice:outputText value="#{item.aams_location_id}"/>
+				</ice:column>
+				
+				<ice:column id="nome_sala" groupOn="#{item.location_name}">
+					<f:facet name="header">
+						<ice:outputText value="Nome Sala" />
+					</f:facet>
+					<ice:outputText value="#{item.location_name}" style="width: 150px;"/>
+				</ice:column>
+				
+				<ice:column id="numero_vlt">
+					<f:facet name="header">
+						<ice:outputText value="# VLT attive in giornata" />
+					</f:facet>
+					<ice:outputText styleClass="iceOutTxtNumber" value="#{item.num_vlt}"/>
+				</ice:column>
+				
+				<ice:column id="total_bet_sala" groupOn="#{item.total_bet_sala}">
+					<f:facet name="header">
+						<ice:outputText value="Totale Bet Sala" />
+					</f:facet>
+					<ice:outputText styleClass="iceOutTxtNumber" value="#{item.total_bet_sala}">
+					<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+					</ice:outputText>
+				</ice:column>
+				
+				<ice:column id="media_bet_sala" groupOn="#{item.media_bet_vlt}">
+					<f:facet name="header">
+						<ice:outputText value="Media bet sala" />
+					</f:facet>
+					<ice:outputText styleClass="iceOutTxtNumber" value="#{item.media_bet_vlt}">
+					<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+					</ice:outputText>
+				</ice:column>
+				
+				<ice:column id="max_bet_vlt">
+					<f:facet name="header">
+						<ice:outputText value="Bet milionario" />
+					</f:facet>
+					<ice:outputText styleClass="iceOutTxtNumber" value="#{item.max_bet_vlt}">
+					<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+					</ice:outputText>
+				</ice:column>
+				
+				<ice:column id="percent_max_bet_vlt">
+					<f:facet name="header">
+						<ice:outputText value="% bet milionario / totale sala" />
+					</f:facet>
+					<ice:outputText styleClass="iceOutTxtDate" value="#{item.percent_max_bet} %">
+					<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+					</ice:outputText>
+				</ice:column>
+				
+				<ice:column id="vlt_bet_alto">
+					<f:facet name="header">
+						<ice:outputText value="ID VLT" />
+					</f:facet>
+					<ice:outputText value="#{item.aams_vlt_id_max_bet}" />
+				</ice:column>
+				
+				<ice:column id="gd_vlt">
+					<f:facet name="header">
+						<ice:outputText value="GD VLT" />
+					</f:facet>
+					<ice:outputText value="#{item.gs_vlt_id}" />
+				</ice:column>
+				
+				<ice:column id="media_vlt_7gg">
+					<f:facet name="header">
+						<ice:outputText value="Media VLT ultimi 7 giorni" />
+					</f:facet>
+					<ice:outputText styleClass="iceOutTxtNumber" value="#{item.media_7gg}" >
+						<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+					</ice:outputText>
+				</ice:column>
+
+				<ice:column id="media_vlt_30gg">
+					<f:facet name="header">
+						<ice:outputText value="Media VLT ultimi 30 giorni" />
+					</f:facet>
+					<ice:outputText styleClass="iceOutTxtNumber" value="#{item.media_30gg}" >
+						<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+					</ice:outputText>
+				</ice:column>
+
+			</ice:dataTable>
+			<br />
+			<ice:dataPaginator id="dataScroll_vlt_mil" for="lista_meter_vlt_mil"
+				paginator="true" fastStep="3" paginatorMaxPages="4"
+				rowsCountVar="rowsCount" displayedRowsCountVar="displayedRowsCount"
+				firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+				pageCountVar="pageCount" pageIndexVar="pageIndex">
+				<f:facet name="first">
+					<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-first.gif"
+						style="border:none;" title="First Page"></ice:graphicImage>
+				</f:facet>
+				<f:facet name="last">
+					<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-last.gif"
+						style="border:none;" title="Last Page"></ice:graphicImage>
+				</f:facet>
+				<f:facet name="previous">
+					<ice:graphicImage
+						url="./xmlhttp/css/xp/css-images/arrow-previous.gif"
+						style="border:none;" title="Previous Page"></ice:graphicImage>
+				</f:facet>
+				<f:facet name="next">
+					<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-next.gif"
+						style="border:none;" title="Next Page"></ice:graphicImage>
+				</f:facet>
+				<f:facet name="fastforward">
+					<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-ff.gif"
+						style="border:none;" title="Fast Forward"></ice:graphicImage>
+				</f:facet>
+				<f:facet name="fastrewind">
+					<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-fr.gif"
+						style="border:none;" title="Fast Backwards"></ice:graphicImage>
+				</f:facet>
+				<ice:outputFormat styleClass="standard"
+					value="{0} elementi trovati, sono visualizzati {1} elementi, da {2} a {3}.">
+					<f:param value="#{rowsCount}" />
+					<f:param value="#{displayedRowsCount}" />
+					<f:param value="#{firstRowIndex}" />
+					<f:param value="#{lastRowIndex}" />
+					<f:param value="#{pageIndex}" />
+					<f:param value="#{pageCount}" />
+				</ice:outputFormat>
+
+			</ice:dataPaginator>
+
+			<br />
+			<br />
+<!--
+			<h3>Pie Chart</h3>
+			<p:pieChart id="piechart_vlt_mil"  model="#{milVltTable.pieModel}" legendPosition="e" fill="false"  
+                title="Custom Options"  sliceMargin="5" diameter="150"/>
+
+  
+	  		<h3><ice:outputText value="#{graphTable.nome_selected_location}"/></h3>
+			<p:lineChart model="#{graphTable.cartesianModel_vlt}" width="98%" id="lineChart_vlt"/>
+
+			<h3>Bar Chart</h3>
+			<p:barChart model="#{chartBean.cartesianModel}"/>
+ -->			 
+			</h:form>
+	</ice:panelGroup>
+
+	<!-- 	<ui:include src="/footer.xhtml" /> -->
+	
+
+	
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>

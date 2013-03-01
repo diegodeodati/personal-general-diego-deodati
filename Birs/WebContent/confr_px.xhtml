@@ -1,0 +1,232 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	
+
+<h:head>
+	<title>Betplus Business Intelligence's Reports and Statistics
+		System</title>
+	
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+		  
+</h:head>
+<h:body >
+	
+	
+					<h:form id="form_DATATABLE" prependId="false" >
+					<p:dataTable id="lista_confronti_meter_locations"  paginator="true" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 	rowsPerPageTemplate="25,50,100"
+						emptyMessage="Nessun dato da visualizzre per il periodo selezionato."
+						rowStyleClass="oddRow, evenRow" styleClass="tableStyle" rows="20"
+						value="#{seicentoTable.confronti_locations}" var="item">
+						
+							<p:columnGroup type="header">
+								<p:row>
+									<p:column rowspan="2" filterBy="#{item.seicento.aams_location_id}" filterMatchMode="contains"
+									headerText="Codice sala" sortBy="#{item.seicento.aams_location_id}"/>
+									<p:column rowspan="2" filterBy="#{item.seicento.location_name}" filterMatchMode="contains"
+									headerText="Nome sala" sortBy="#{item.seicento.location_name}"/>
+									<p:column rowspan="2" headerText="Data" sortBy="#{item.seicento.data}"/>
+									
+									<p:column colspan="2" headerText="G. macchina"/>
+									<p:column colspan="2" headerText="Bet"/>
+									<p:column colspan="2" headerText="Win"/>
+									<p:column colspan="2" headerText="Games Played"/>
+									<p:column colspan="2" headerText="Total In"/>
+									<p:column colspan="2" headerText="Total Out"/>
+								</p:row>
+
+								<p:row>
+									<p:column headerText="600" sortBy="#{item.seicento.numVlt}"/>
+									<p:column headerText="Sogei" sortBy="#{item.sogei.numVlt}"/>
+
+									<p:column headerText="600" sortBy="#{item.seicento.bet}"/>
+									<p:column headerText="Sogei" sortBy="#{item.sogei.bet}"/>
+
+									<p:column headerText="600" sortBy="#{item.seicento.win}"/>
+									<p:column headerText="Sogei" sortBy="#{item.sogei.win}"/>
+
+									<p:column headerText="600" sortBy="#{item.seicento.gamesPlayed}"/>
+									<p:column headerText="Sogei" sortBy="#{item.sogei.gamesPlayed}"/>
+
+									<p:column headerText="600" sortBy="#{item.seicento.totalIn}"/>
+									<p:column headerText="Sogei" sortBy="#{item.sogei.totalIn}"/>
+
+									<p:column headerText="600" sortBy="#{item.seicento.totalOut}"/>
+									<p:column headerText="Sogei" sortBy="#{item.sogei.totalOut}"/>
+								</p:row>
+							</p:columnGroup>
+						
+
+												<p:column>
+							<h:outputText id="loc_id"
+								value="#{item.seicento.aams_location_id}" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="#{item.seicento.location_name}"
+								id="location_name_sogei" style="width: 150px;" />
+						</p:column>
+
+						<p:column >
+							<h:outputText value="#{item.sogei.data}"
+								styleClass="iceOutTxtDate">
+								<f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="#{meterTable.timeZone}" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="#{item.seicento.numVlt}"
+								styleClass="iceOutTxtNumber" />
+						</p:column>
+
+						<p:column rendered="#{(item.seicento.numVlt - item.sogei.numVlt)==0}">
+							<h:outputText value="#{item.sogei.numVlt}" styleClass="iceOutTxtNumber" />
+						</p:column>
+						<p:column style="background-color: #FFCCCC;" rendered="#{(item.seicento.numVlt - item.sogei.numVlt)!=0}">				
+							<h:outputText value="#{item.sogei.numVlt}" styleClass="iceOutTxtNumber"/>
+						</p:column>
+
+						<p:column>
+							<h:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.bet}" converter="javax.faces.BigDecimal">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+						
+						<p:column rendered="#{(item.seicento.bet - item.sogei.bet)==0}">
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.bet}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+						<p:column rendered="#{(item.seicento.bet - item.sogei.bet)!=0}" style="background-color: #FFCCCC;">						
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.bet}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+
+					<p:column rendered="#{(item.seicento.win - item.sogei.win)==0}">
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+						<p:column rendered="#{(item.seicento.win - item.sogei.win)!=0}" style="background-color: #FFCCCC;">						
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.win}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number" />
+							</h:outputText>
+						</p:column>
+
+						<p:column rendered="#{(item.seicento.gamesPlayed - item.sogei.gamesPlayed)==0}">
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+						<p:column rendered="#{(item.seicento.gamesPlayed - item.sogei.gamesPlayed)!=0}" style="background-color: #FFCCCC;">						
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.gamesPlayed}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.totalIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+
+						<p:column rendered="#{(item.seicento.totalIn - item.sogei.totalIn)==0}">
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+						<p:column rendered="#{(item.seicento.totalIn - item.sogei.totalIn)!=0}" style="background-color: #FFCCCC;">						
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalIn}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<h:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.totalOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+
+						<p:column rendered="#{(item.seicento.totalOut - item.sogei.totalOut)==0}">
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+						<p:column rendered="#{(item.seicento.totalOut - item.sogei.totalOut)!=0}" style="text-align:right; align:right; background-color: #FFCCCC;">						
+							<h:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalOut}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</h:outputText>
+						</p:column>
+						
+					</p:dataTable>
+					</h:form>
+
+
+
+</h:body>
+</html>

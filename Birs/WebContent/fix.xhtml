@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:p="http://primefaces.prime.com.tr/ui"  >
+	
+<h:head>
+	<title>Betplus Business Intelligence's Reports and Statistics
+		System</title>
+	
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+	<meta http-equiv="pragma" content="no-cache"/>
+	<meta http-equiv="expires" content="0"/>	  	 	  
+</h:head>
+<h:body>
+
+	<ui:include src="/intestazione.xhtml" />
+
+	<ui:include src="/menu.xhtml" />
+
+
+	<ice:panelGroup id="centerFix" styleClass="TabCenter">
+	 	<h:form prependId="false"> 
+			<ice:panelGroup>
+				<table>
+					<tr>
+						<td colspan="2"><ice:outputText
+								value="Ogni giorno possono essere state aggiunte nuove sale o installate nuove VLT. Può capitare che qualche informazione a riguardo di esse non sia pervenuta al momento dell'import dei dati di gioco.
+								Premere il pulsante Fix per provare a correggere queste eventuali mancanze od errori anagrafici." style="font-size: 13px;"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						<p:commandButton value="Fix Games" ajax="resultGame" async="TRUE"
+								style="font-size: 12px; width: 110px; height: 30px; "
+								action="#{seicentoTable.fixGame}" /></td>
+						<td><ice:outputText id="resultGame" value="#{seicentoTable.fixresultGame}" style="font-size: 13px;"/></td>
+					</tr>
+					<tr>
+						<td>
+						<p:commandButton value="Fix VLT" ajax="resultVlt" async="TRUE"
+								style="font-size: 12px; width: 110px; height: 30px; "
+								action="#{seicentoTable.fixVlt}" /></td>
+						<td><ice:outputText id="resultVlt" value="#{seicentoTable.fixresultVlt}" style="font-size: 13px;"/></td>
+					</tr>
+					<tr>
+						<td>
+						<p:commandButton value="Fix Location" ajax="resultLocation" async="TRUE"
+								style="font-size: 12px; width: 110px; height: 30px; "
+								action="#{seicentoTable.fixLocation}" /></td>
+						<td><ice:outputText id="resultLocation" value="#{seicentoTable.fixresultLocation}" style="font-size: 13px;"/></td>
+					</tr>
+					<!-- 
+					<tr>
+						<td>
+						<p:commandButton value="Fix Clienti" ajax="resultClienti" async="TRUE"
+								style="font-size: 12px; width: 110px; height: 30px; "
+								action="#{seicentoTable.fixClienti}" /></td>
+						<td><ice:outputText id="resultClienti" value="#{seicentoTable.fixresultClienti}" style="font-size: 13px;"/></td>
+					</tr>
+					-->
+				</table>
+			</ice:panelGroup>
+		</h:form> 
+	</ice:panelGroup>
+
+
+
+
+
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>

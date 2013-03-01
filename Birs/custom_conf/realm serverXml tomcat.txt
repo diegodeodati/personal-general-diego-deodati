@@ -1,0 +1,8 @@
+		
+	<Realm className="org.apache.catalina.realm.JDBCRealm"
+      driverName="oracle.jdbc.OracleDriver"  
+   connectionURL="jdbc:oracle:thin:@192.168.100.82:1521:LTIB" 
+       userTable="UTENTI" userNameCol="username" userCredCol="password"
+   userRoleTable="RUOLI" roleNameCol="ruolo" connectionName="luca" 
+ connectionPassword="luca" />
+	

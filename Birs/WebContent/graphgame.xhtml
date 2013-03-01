@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:p="http://primefaces.prime.com.tr/ui"  >
+	
+<h:head>
+	<title>Betplus Business Intelligence's Reports and Statistics
+		System</title>
+	
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+	<meta http-equiv="pragma" content="no-cache"/>
+	<meta http-equiv="expires" content="0"/>	  	  
+</h:head>
+<h:body >
+	
+ 		<ui:include src="/intestazione.xhtml" />
+	
+		<ui:include src="/menu.xhtml" />
+ 
+ 
+		<ice:panelGroup id="centerGraphGame" styleClass="TabCenter">
+		<h:form id="gvform">
+			<ice:outputText value="Grafici per gioco"
+				style="font-size: 16px; font-weight: bold;" />
+
+			<br />
+			<br />
+			
+						<br />
+			<ice:panelGroup id="pgro_game_1">
+				<ice:panelGrid columns="5" id="pgrid_game_1" >
+					<ice:panelGrid columns="1" id="pgrid_game_1_5" >
+						<ice:outputText value="Selezionare un intervallo temporale"
+							style="align: center;" />
+						<ice:panelGrid columns="2" id="pgrid_game_2" >
+				<!--			<ice:selectInputDate id="date1" value="#{graphTable.data1}"
+								style="font-size: 12px; width: 30px"
+								renderMonthAsDropdown="false" renderYearAsDropdown="true"
+								renderWeekNumbers="false" renderAsPopup="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="#{meterTable.timeZone}" />
+							</ice:selectInputDate>
+							<ice:selectInputDate id="date2" value="#{graphTable.data2}"
+								style="font-size: 12px; width: 30px"
+								renderMonthAsDropdown="false" renderYearAsDropdown="true"
+								renderWeekNumbers="false" renderAsPopup="true">
+								<f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="#{meterTable.timeZone}" />
+							</ice:selectInputDate>
+							  -->
+							  
+							<p:calendar value="#{graphTable.data1}" showOn="button" pattern="dd/MM/yyyy" locale="it" mindate="01/09/2010" maxdate="#{seicentoTable.oggi}"/>
+							<p:calendar value="#{graphTable.data2}" showOn="button" pattern="dd/MM/yyyy" locale="it" mindate="01/09/2010" maxdate="#{seicentoTable.oggi}"/>
+				
+						</ice:panelGrid>
+					</ice:panelGrid>
+					<ice:panelGrid columns="1" id="pgrid_game_3" >
+						<ice:outputText value="Selezionare una sala" />
+						<ice:selectOneMenu id="selectbox_location_GAME" partialSubmit="true"
+							binding="#{graphTable.cmbLocation}"
+							valueChangeListener="#{graphTable.changeLocation}" rows="0"
+							value="#{graphTable.id_selected_location}" style="width: 95%; ">
+							<f:selectItem itemLabel=" - Tutte le sale" itemValue=" - " id="selectbox_game_selectitem0"/>
+							<f:selectItems value="#{graphTable.location_list}" id="selectbox_game_selectitem"/>
+						</ice:selectOneMenu>
+					</ice:panelGrid>
+					<ice:panelGrid columns="1" id="pgrid_game_4" >
+						<ice:outputText value="Selezionare uno o più giochi (tenendo premuto CTRL)" />
+						<ice:selectManyListbox id="selectmanulistbox_game" 
+							value="#{graphTable.selected_games}" style="overflow: auto; height:80px; width: 95%; ">
+							<f:selectItems value="#{graphTable.game_list}" id="selectbox_game_selectitem2"/>
+						</ice:selectManyListbox>
+					</ice:panelGrid>
+					<ice:panelGrid columns="1" id="pgrid_game_5" >
+						<ice:outputText value="Selezionare un parametro" />
+							<ice:selectOneMenu id="selectbox_parameter_game" partialSubmit="true"
+								binding="#{graphTable.cmbParameter}" valueChangeListener="#{graphTable.changeParameter}" rows="0"
+								value="#{graphTable.selected_parameter}" style="width: 95%; ">
+								<f:selectItem id="si_game_01" itemLabel="Bet" itemValue="Bet" />
+								<f:selectItem id="si_game_02" itemLabel="Win" itemValue="Win" />
+								<f:selectItem id="si_game_03" itemLabel="Games Played" itemValue="Games Played" />
+								<f:selectItem id="si_game_12"  itemLabel="Jackpot Wins" itemValue="Jackpot Wins" />
+								<f:selectItem id="si_game_13"  itemLabel="Jackpot Contribution" itemValue="Jackpot Contribution" />
+								<f:selectItem id="si_game_14"  itemLabel="Preu" itemValue="Preu" />
+								<f:selectItem id="si_game_15"  itemLabel="AAMS" itemValue="AAMS" />
+								<f:selectItem id="si_game_16"  itemLabel="Net Win" itemValue="Net Win" />
+								<f:selectItem id="si_game_17"  itemLabel="House Win" itemValue="House Win" />
+								<f:selectItem id="si_game_18"  itemLabel="Supplier Profit" itemValue="Supplier Profit" />
+							</ice:selectOneMenu>
+					</ice:panelGrid>
+					<ice:panelGrid columns="1" id="pgrid_game_6" >
+					<ice:outputText value=" " />
+					<h:commandButton value="Visualizza grafico"
+						style="font-size: 11px; width: 35; height: 40px; "
+						actionListener="#{graphTable.getNewCartesianModel_game}" />
+					</ice:panelGrid>
+				</ice:panelGrid>
+			</ice:panelGroup>
+			<br />
+			<br />
+			
+			
+<!-- 			<h3>Pie Chart</h3>
+			<p:pieChart id="piechart"  model="#{meterTable.pieModel}" legendPosition="e" fill="false"  
+                title="Custom Options"  sliceMargin="5" diameter="150"/>
+ -->
+ 
+	  		<h3><ice:outputText value="#{graphTable.nome_selected_location}"/></h3>
+			<p:lineChart model="#{graphTable.cartesianModel_game}" width="98%" id="lineChart_game"/>
+ 
+<!--			<h3>Bar Chart</h3>
+			<p:barChart model="#{chartBean.cartesianModel}"/>
+			 -->
+			</h:form>
+	</ice:panelGroup>
+
+	<!-- 	<ui:include src="/footer.xhtml" /> -->
+	
+
+	
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>

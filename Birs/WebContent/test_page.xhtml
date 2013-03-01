@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:p="http://primefaces.prime.com.tr/ui"  >
+	
+<h:head>
+	<title>Betplus Business Intelligence's Reports and Statistics
+		System</title>
+	
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+		  
+</h:head>
+<h:body >
+	
+ 		<ui:include src="/intestazione.xhtml" />
+	
+		<ui:include src="/menu.xhtml" />
+ 
+ 
+		<ice:panelGroup id="center2" styleClass="TabCenter">
+		<h:form>
+			<ice:outputText value="Benvenuto nell'area Test."
+				style="font-size: 16px; font-weight: bold;" />
+
+			<br />
+			<ice:outputText
+				value="Qui puoi visualizzare alcuni componenti che stiamo testando e che potrebbero essere integrati in futuro." />
+			<br />
+			<br />
+			
+						<br />
+			
+				<ice:panelGrid columns="3">
+				<ice:selectInputDate  id="date1" value="#{meterTable.data1}"  
+					style="font-size: 10px; width: 50px" renderMonthAsDropdown="false"
+					renderYearAsDropdown="true" renderWeekNumbers="false"
+					renderAsPopup="true">
+					<f:convertDateTime pattern="dd/MM/yyyy" 
+						timeZone="#{meterTable.timeZone}" />
+				</ice:selectInputDate>
+
+				<ice:selectInputDate id="date2" value="#{meterTable.data2}"
+					style="font-size: 10px; width: 50px" renderMonthAsDropdown="false"
+					renderYearAsDropdown="true" renderWeekNumbers="false"
+					renderAsPopup="true">
+					<f:convertDateTime pattern="dd/MM/yyyy"
+						timeZone="#{meterTable.timeZone}" />
+				</ice:selectInputDate>
+				<h:commandButton value="OK"
+						style="font-size: 10px; width: 30; height: 25px; "
+						actionListener="#{meterTable.getNewPieModel}" />
+				</ice:panelGrid>
+			
+			<br />
+			<br />
+			
+			
+			<h3>Pie Chart</h3>
+			<p:pieChart id="piechart"  model="#{meterTable.pieModel}" legendPosition="e" fill="false"  
+                title="Custom Options"  sliceMargin="5" diameter="150"/>
+
+	<!-- 		<h3>Line Chart</h3>
+			<p:lineChart model="#{chartBean.cartesianModel}"/>
+
+			<h3>Bar Chart</h3>
+			<p:barChart model="#{chartBean.cartesianModel}"/>
+			 -->
+			</h:form>
+	</ice:panelGroup>
+
+	<!-- 	<ui:include src="/footer.xhtml" /> -->
+	
+
+	
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>

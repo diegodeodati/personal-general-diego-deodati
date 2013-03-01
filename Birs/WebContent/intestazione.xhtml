@@ -1,0 +1,37 @@
+
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
+<h:head>
+	<title></title>
+	
+	<link rel="stylesheet" type="text/css" href="./xmlhttp/css/rime/rime.css"/> 
+			<link href="./css/showcase_style.css" rel="stylesheet" type="text/css" />
+        	<link href="./css/showcase_overrides.css" rel="stylesheet" type="text/css" />
+        	<link href="./css/showcase_layout.css" rel="stylesheet" type="text/css" />
+	
+</h:head>
+<h:body styleClass="ice-skin-sam">
+
+	<h:panelGroup border="0" id="header" styleClass="TabHeader">
+		
+		<h:panelGrid columns="1" style="float: right; vertical-align: middle;">
+			<h:outputText value="#{loginController.loggedUser.username}" style="float: left;"/>
+			<h:outputText value="#{loginController.loggedUser.roleName}" style="float: left;"/>
+			<h:outputText value="#{loginController.loggedUser.nome} #{loginController.loggedUser.cognome}" style="float: left;"/>
+		</h:panelGrid>
+		<h:panelGrid columns="1" style="float: right; ">
+			<h:outputText value="Utente:" style="float: right;" />
+			<h:outputText value="Ruolo:" style="float: right;"/>
+			<h:outputText value="Nome:" style="float: right;"/>
+		</h:panelGrid>
+	</h:panelGroup>
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>

@@ -1,0 +1,296 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
+	
+
+<h:head>
+	<title>Betplus Business Intelligence's Reports and Statistics
+		System</title>
+	
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+	<meta http-equiv="pragma" content="no-cache"/>
+	<meta http-equiv="expires" content="0"/>	  	 	  
+</h:head>
+<h:body >
+
+	
+		<ui:include src="/intestazione.xhtml" />
+	
+		<ui:include src="/menu.xhtml" />
+
+
+	<ice:panelGroup id="pre_center" styleClass="TabCenter">
+		<h:form>
+		
+			<br />
+			<br />
+			
+			<ice:panelCollapsible id="formPanelAU" expanded="false"
+				style="width:300px">
+				<f:facet name="header">
+					<ice:panelGroup>
+						<ice:outputText id="formHeaderau" value="Crea nuovo utente" />
+					</ice:panelGroup>
+				</f:facet>
+				<ice:panelGroup>
+						<ice:panelGrid columns="2" style="width: 95%; align: center;">
+						<ice:outputText value="Username"/>
+						<ice:inputText value="#{userController.username}" maxlength="50"
+							style="width: 96%; " />
+						<ice:outputText value="Password" />
+						<ice:inputSecret value="#{userController.password}"  maxlength="50"
+							style="width: 96%; " />
+						<ice:outputText value="Nome" />
+						<ice:inputText value="#{userController.nome}" maxlength="50"
+							style="width: 96%; " />
+						<ice:outputText value="Cognome" />
+						<ice:inputText value="#{userController.cognome}" maxlength="50"
+							style="width: 96%; " />
+						<ice:outputText value="Ruoli" />
+						<ice:selectManyListbox id="selectmanylistbox_ruoli" 
+							value="#{userController.selected_ruoli}" style="overflow: auto; height:65px; width: 98%; ">
+							<f:selectItem itemValue="admin" itemLabel="admin" id="selectbox_ruoli_selectitem_1"/>
+							<f:selectItem itemValue="guest" itemLabel="guest" id="selectbox_ruoli_selectitem_2"/>
+							<f:selectItem itemValue="coge" itemLabel="coge" id="selectbox_ruoli_selectitem_3"/>
+							<f:selectItem itemValue="presidio" itemLabel="presidio" id="selectbox_ruoli_selectitem_4"/>
+						</ice:selectManyListbox>
+					</ice:panelGrid>
+				</ice:panelGroup>
+				<br />
+				<ice:panelGroup style="text-align: center;">
+					<h:commandButton value="Crea"
+						style="width: 50px; height: 30px; "
+						actionListener="#{userController.inserisciUtente}" />
+						<br />
+					<ice:outputText value="#{userController.msgUtenteCreato}" style="font-size: 10px; color: green;"/>
+					<ice:outputText value="#{userController.msgUtenteNonCreato}" style="font-size: 10px; color: red;"/>
+				</ice:panelGroup>
+				<br />
+			</ice:panelCollapsible>
+	
+			<br />
+			<br />
+
+ 
+
+			<ice:dataTable width="50%" id="lista_utenti" border="1"
+				resizable="true" columnClasses="columnClass"
+				rowClasses="oddRow, evenRow" styleClass="tableStyle" style="align:center" rows="20"
+				value="#{userController.userList}" var="item">
+
+
+				<ice:column id="username">
+					<f:facet name="header">
+						<ice:commandSortHeader
+							actionListener="#{userController.ordinaPerUsername}"
+							columnName="#{userController.usernameColumnName}" arrow="true"
+							value="#{userController.usernameColumnName}" />
+					</f:facet>
+					<ice:outputText value="#{item.username}"></ice:outputText>
+				</ice:column>
+				
+				<ice:column id="nome">
+					<f:facet name="header">
+						<ice:commandSortHeader
+							actionListener="#{userController.ordinaPerNome}"
+							columnName="#{userController.nomeColumnName}" arrow="true"
+							value="#{userController.nomeColumnName}" />
+					</f:facet>
+					<ice:outputText value="#{item.nome}"></ice:outputText>
+				</ice:column>
+				
+				<ice:column id="cognome">
+					<f:facet name="header">
+						<ice:commandSortHeader
+							actionListener="#{userController.ordinaPerCognome}"
+							columnName="#{userController.cognomeColumnName}" arrow="true"
+							value="#{userController.cognomeColumnName}" />
+					</f:facet>
+					<ice:outputText value="#{item.cognome}"></ice:outputText>
+				</ice:column>
+
+				<ice:column id="ruoli">
+					<f:facet name="header">
+						<ice:outputText value="#{userController.listaRuoliColumnName}"></ice:outputText>
+					</f:facet>
+					<ice:outputText value="#{item.listaRuoli}"></ice:outputText>
+				</ice:column>
+				
+				<ice:column id="modifica" style="width: 30px">
+					<f:facet name="header">
+						<ice:outputText value="Mod/Elim"></ice:outputText>
+					</f:facet>
+					<div id="id_button_mod_elim" style="width: 50px">
+						<h:commandButton image="./css/images/modifica.gif"
+							actionListener="#{userController.modUtente}">
+							<f:attribute name="username_mod" value="#{item.username}"/>  
+						</h:commandButton>
+						<h:commandButton style="padding-left: 10px"
+							image="./css/images/elimina.gif"
+							actionListener="#{userController.elimUtente}">
+							<f:attribute name="username_elim" value="#{item.username}" />
+						</h:commandButton>
+					</div>
+				</ice:column>
+				
+			</ice:dataTable>
+			
+			<br/>
+					<ice:dataPaginator id="dataScroll" for="lista_utenti"
+						paginator="true" fastStep="3" paginatorMaxPages="4"
+						rowsCountVar="rowsCount"
+						displayedRowsCountVar="displayedRowsCount"
+						firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+						pageCountVar="pageCount" pageIndexVar="pageIndex">
+						<f:facet name="first">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-first.gif"
+								style="border:none;" title="First Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="last">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-last.gif"
+								style="border:none;" title="Last Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="previous">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-previous.gif"
+								style="border:none;" title="Previous Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="next">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-next.gif"
+								style="border:none;" title="Next Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastforward">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-ff.gif"
+								style="border:none;" title="Fast Forward"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastrewind">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-fr.gif"
+								style="border:none;" title="Fast Backwards"></ice:graphicImage>
+						</f:facet>
+						<ice:outputFormat styleClass="standard"
+							value="{0} elementi trovati, sono visualizzati {1} elementi, da {2} a {3}.">
+							<f:param value="#{rowsCount}" />
+							<f:param value="#{displayedRowsCount}" />
+							<f:param value="#{firstRowIndex}" />
+							<f:param value="#{lastRowIndex}" />
+							<f:param value="#{pageIndex}" />
+							<f:param value="#{pageCount}" />
+						</ice:outputFormat>
+
+					</ice:dataPaginator>
+
+				<br/>
+
+			<ice:panelCollapsible id="mod_user" expanded="true"
+				toggleOnClick="false" rendered="#{userController.modUser}"
+				disabled="#{!userController.modUser}"
+				visible="#{userController.modUser}" style="width:300px">
+				<f:facet name="header">
+					<ice:panelGroup>
+						<ice:outputText id="mod_formHeaderpcol"
+							value="Modifica dati utente" />
+					</ice:panelGroup>
+				</f:facet>
+				<ice:panelGroup>
+					<ice:panelGrid columns="2" style="width: 95%; align: center;">
+						<ice:outputText value="Username" />
+						<ice:inputText value="#{userController.mod_username}"
+							maxlength="50" style="width: 96%; " />
+						<ice:outputText value="Password" />
+						<ice:inputText value="#{userController.mod_password}"
+							maxlength="50" style="width: 96%; " />
+						<ice:outputText value="Nome" />
+						<ice:inputText value="#{userController.mod_nome}" maxlength="50"
+							style="width: 96%; " />
+						<ice:outputText value="Cognome" />
+						<ice:inputText value="#{userController.mod_cognome}"
+							maxlength="50" style="width: 96%; " />
+						<ice:outputText value="Ruoli" />
+						<ice:selectManyListbox id="mod_selectmanylistbox_ruoli"
+							value="#{userController.mod_selected_ruoli}"
+							style="overflow: auto; height:65px; width: 98%; ">
+							<f:selectItem itemValue="admin" itemLabel="admin"
+								id="mod_selectbox_ruoli_selectitem_1" />
+							<f:selectItem itemValue="guest" itemLabel="guest"
+								id="mod_selectbox_ruoli_selectitem_2" />
+							<f:selectItem itemValue="coge" itemLabel="coge"
+								id="smod_electbox_ruoli_selectitem_3" />
+							<f:selectItem itemValue="presidio" itemLabel="presidio"
+								id="mod_selectbox_ruoli_selectitem_4" />
+						</ice:selectManyListbox>
+					</ice:panelGrid>
+				</ice:panelGroup>
+				<br />
+				<ice:panelGroup style="text-align: center;">
+					<h:commandButton value="Modifica"
+						style="width: 65px; height: 30px; "
+						actionListener="#{userController.modificaUtente}" />
+					<br />
+					<ice:outputText value="#{userController.msgUtenteModificato}"
+						style="font-size: 10px; color: green;" />
+					<ice:outputText value="#{userController.msgUtenteNonModificato}"
+						style="font-size: 10px; color: red;" />
+					<br />
+				</ice:panelGroup>
+
+			</ice:panelCollapsible>
+
+			<ice:panelCollapsible id="elim_user" expanded="true"
+				toggleOnClick="false" rendered="#{userController.elimUser}"
+				disabled="#{!userController.elimUser}"
+				visible="#{userController.elimUser}" style="width:300px">
+				<f:facet name="header">
+					<ice:panelGroup>
+						<ice:outputText id="elim_formHeaderpcol" value="Elimina utente" />
+					</ice:panelGroup>
+				</f:facet>
+				<ice:panelGroup style="align: center; width: 300px">
+					<ice:outputText
+						value="Vuoi eliminare #{userController.elim_username}?" />
+
+					<br />
+
+					<div id="id_elim_yess" style="align: center; width: 100px">
+						<h:commandButton value="Sì" style="width: 40px; height: 30px; "
+							actionListener="#{userController.eliminaUtente}" />
+						<h:commandButton value="No"
+							style="width: 40px; height: 30px; padding-left: 10px;"
+							actionListener="#{userController.noElim}" />
+					</div>
+					<br />
+					<ice:outputText value="#{userController.msgUtenteEliminato}"
+						style="font-size: 10px; color: green;" />
+					<ice:outputText value="#{userController.msgUtenteNonEliminato}"
+						style="font-size: 10px; color: red;" />
+					<br />
+				</ice:panelGroup>
+			</ice:panelCollapsible>
+
+			<br />
+			<br />
+			
+		</h:form>
+	</ice:panelGroup>
+
+
+
+
+
+<!-- 	<ui:include src="/footer.xhtml" /> -->
+	
+
+
+
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>

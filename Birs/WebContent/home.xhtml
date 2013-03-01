@@ -1,0 +1,1933 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:p="http://primefaces.prime.com.tr/ui"  >
+	
+	
+
+<h:head>
+	<title>Betplus Business Intelligence's Reports and Statistics
+		System</title>
+	
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+	<meta http-equiv="pragma" content="no-cache"/>
+	<meta http-equiv="expires" content="0"/>	  
+</h:head>
+<h:body >
+	
+		<ui:include src="/intestazione.xhtml" />
+	
+		<ui:include src="/menu.xhtml" />
+
+
+	<script type="text/javascript">
+		function delayer() {
+			alert('La sessione è scaduta. Clicca sul pulsante per ricaricare la pagina.');
+			window.location = "/birs/home.xhtml";
+		}
+
+		setTimeout("delayer()",	3660000); //il popup comparirà dopo 1 ora e 1 minuto
+	</script>
+
+ 
+
+	<ice:panelGroup id="center" styleClass="TabCenter">
+		<h:form>
+			<ice:outputText value="Benvenuto." style="font-size: 16px; font-weight: bold;"/>
+
+			<br />
+			<ice:outputText 
+				value="Stai utilizzando Betplus Business Intelligence's Reports and Statistics System." />
+			<br />
+			<br />
+
+			
+
+			<ice:panelCollapsible id="formPanel" expanded="false"
+				style="width:23%">
+				<f:facet name="header">
+					<ice:panelGroup>
+						<ice:outputText id="formHeader" value="Ricerca" />
+					</ice:panelGroup>
+				</f:facet>
+				<ice:panelGroup>
+					<ice:panelGrid columns="2" style="width: 95%; align: center;">
+						<ice:outputText id="outTxtRicerca" value="Nome Sala"/>
+						<ice:inputText value="#{meterTable.location_name}" maxlength="50"
+							style="width: 96%; " />
+						<ice:outputText value="Codice Sala" />
+						<ice:inputText value="#{meterTable.aams_location_id}"
+							maxlength="12" style="width: 96%; " />
+						<ice:outputText value="Codice VLT" />
+						<ice:inputText value="#{meterTable.aams_vlt_id}" 
+							maxlength="11" style="width: 96%; " />
+						<ice:outputText value="Regione" />
+						<ice:selectOneMenu binding="#{meterTable.cmbRegioni}"
+							id="research_reg" partialSubmit="true" rows="0"
+							valueChangeListener="#{meterTable.changeRegione}"
+							value="#{meterTable.regione}" style="width: 100%; ">
+							<f:selectItem itemLabel=" - " itemValue=" - " />
+							<f:selectItems value="#{meterTable.lista_regioni}" />
+						</ice:selectOneMenu>
+						<ice:outputText value="Provincia" />
+						<ice:selectOneMenu binding="#{meterTable.cmbProvince}"
+							id="research_pro" partialSubmit="true"
+							valueChangeListener="#{meterTable.changeProvincia}"
+							value="#{meterTable.provincia}" style="width: 100%; ">
+							<f:selectItem itemLabel=" - " itemValue=" - " />
+							<f:selectItems value="#{meterTable.lista_province}" />
+						</ice:selectOneMenu>
+						<ice:outputText value="Comune" />
+						<ice:selectOneMenu binding="#{meterTable.cmbComuni}"
+							id="research_cit" partialSubmit="true"
+							valueChangeListener="#{meterTable.changeComune}"
+							value="#{meterTable.comune}" style="width: 100%; ">
+							<f:selectItem itemLabel=" - " itemValue="-1" />
+							<f:selectItems value="#{meterTable.lista_comuni}" />
+						</ice:selectOneMenu>
+						<ice:outputText value="Cod. Gestore" />
+						<ice:inputText value="#{meterTable.cod_gestore}" maxlength="50"
+							style="width: 96%; " />					
+					</ice:panelGrid>						
+				</ice:panelGroup>
+				
+				<br />
+				
+				<ice:panelGroup style="text-align: center;">
+					<h:commandButton value="Effettua ricerca"
+						style="width: 30%; height: 30px; "
+						actionListener="#{meterTable.query}" />
+					<h:commandButton value="Reset"
+						style="width: 30%; height: 30px; " 
+						action="#{meterTable.reset}" />
+				</ice:panelGroup>
+				<br />
+			</ice:panelCollapsible>
+
+
+
+
+	<!-- SELEZIONE DATA -->
+
+			<br />
+			<br />
+			<ice:panelGroup>
+				<ice:panelGrid columns="4">
+				<p:calendar value="#{meterTable.data1}" showOn="button"  pattern="dd/MM/yyyy" locale="it" mindate="01/09/2010" maxdate="#{seicentoTable.oggi}"/>
+				<p:calendar value="#{meterTable.data2}" showOn="button"  pattern="dd/MM/yyyy" locale="it" mindate="01/09/2010" maxdate="#{seicentoTable.oggi}"/>
+				&nbsp;
+				<h:commandButton value="OK"
+						style="font-size: 10px; width: 30; height: 25px; " lang="it"
+						actionListener="#{meterTable.query}" />
+				</ice:panelGrid>
+			</ice:panelGroup>
+			<br />
+
+		
+
+			<ice:panelTabSet id="panel_tab_set" tabChangeListener="#{meterTable.tabChangeListener}" selectedIndex="#{meterTable.selectIndex}" style="display: block;">
+				<ice:panelTab id="panel_tab_game" label="Dettagli per gioco" >
+
+				<ice:panelGrid columns="5">
+					<h:button onclick="alert('Numero massimo di righe superato (65.536): export in XLS non disponibile per questa mole di dati. Si consiglia di utilizzare la funzione Mostra Totale')" image="./css/images/xls_icon_no.png" rendered="#{meterTable.gameIsBig}"/>
+					<ice:dataExporter label="Esporta in xls" renderLabelAsButton="false" image="./css/images/xls_icon.png" binding="#{meterTable.dataExporterXlsGame}" 
+						for="panel_tab_set:panel_tab_game:lista_meter" type="excel" ignorePagination="true" outputTypeHandler="#{meterTable.customExcelExporter}"
+						popupBlockerLabel="Popup Blocker detected - click here to resume download..." rendered="#{!meterTable.gameIsBig}"/>
+					&nbsp;
+					<ice:dataExporter label="Esporta in csv" renderLabelAsButton="false" image="./css/images/csv_icon.png" binding="#{meterTable.dataExporterCsvGame}"
+						for="panel_tab_set:panel_tab_game:lista_meter" type="csv" ignorePagination="true"
+						popupBlockerLabel="Popup Blocker detected - click here to resume download..." />
+					
+					<ice:panelGroup style="padding-left: 60px;">
+						<h:commandButton value="Mostra singoli giorni"
+								action="#{meterTable.mostraSingoliGiorni_game}"
+								disabled="#{!meterTable.mostraTotale_game}" style="font-weight: bold; width:160px;" />
+						<br />
+						<h:commandButton value="Mostra totale"
+								action="#{meterTable.mostraTotale_game}"
+								disabled="#{meterTable.mostraTotale_game}"  style="font-weight: bold; width:160px;" />
+					</ice:panelGroup>
+					
+					<ice:panelGroup style="padding-left: 60px;">
+							<h:commandButton value="Mostra sale non aperte"
+								action="#{meterTable.mostraSaleNonAperte_game}"
+								disabled="#{!meterTable.nascondiSaleNonAperte_game}" style="font-weight: bold; width:160px;" />
+							<br />
+							<h:commandButton value="Nascondi sale non aperte"
+								action="#{meterTable.nascondiSaleNonAperte_game}"
+								disabled="#{meterTable.nascondiSaleNonAperte_game}" style="font-weight: bold;  width:160px;" />
+					</ice:panelGroup> 
+					
+				</ice:panelGrid>
+				<br />
+				
+				<div class="divStyle" >
+					<ice:dataTable width="95%" id="lista_meter" border="1"
+						resizable="true" 
+						columnClasses="columnClass" 
+						rowClasses="oddRow, evenRow" styleClass="tableStyle" rows="20"
+						value="#{meterTable.meterList_game}" var="item">
+								
+						<ice:column id="columnProvincia" groupOn="#{item.provincia}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerProvincia}"
+									columnName="#{meterTable.provinciaColumnName}" arrow="true"
+									value="#{meterTable.provinciaColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.provincia}"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="columnComune" groupOn="#{item.comune}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerComune}"
+									columnName="#{meterTable.comuneColumnName}" arrow="true"
+									value="#{meterTable.comuneColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.comune}"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="columnCodGestore" groupOn="#{item.cod_gestore}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerCodGestore}"
+									columnName="#{meterTable.codGestoreColumnName}" arrow="true"
+									value="#{meterTable.codGestoreColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.cod_gestore}"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="columnLocationAddress" groupOn="#{item.location_address}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerLocationAddress}"
+									columnName="#{meterTable.locationAddressColumnName}" arrow="true"
+									value="#{meterTable.locationAddressColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.location_address}" style="width: 150px;"></ice:outputText>
+						</ice:column>
+													
+						<ice:column id="columnAamsLocationId" groupOn="#{item.aams_location_id}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAamsLocationId}"
+									columnName="#{meterTable.aamsLocationIdColumnName}"
+									arrow="true" value="#{meterTable.aamsLocationIdColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.aams_location_id}"></ice:outputText>
+						</ice:column>
+
+						<ice:column id="columnLocationName" groupOn="#{item.location_name}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerLocationName}"
+									columnName="#{meterTable.locationNameColumnName}" arrow="true"
+									value="#{meterTable.locationNameColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.location_name}" style="width: 150px;"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="columnAamsVltId" groupOn="#{item.aams_vlt_id}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAamsVltId}"
+									columnName="#{meterTable.aamsVltIdColumnName}" arrow="true"
+									value="#{meterTable.aamsVltIdColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.aams_vlt_id}"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="columnGsVltId" groupOn="#{item.gs_vlt_id}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerGsVltId}"
+									columnName="#{meterTable.gsVltIdColumnName}" arrow="true"
+									value="#{meterTable.gsVltIdColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.gs_vlt_id}"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="columnGameName">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAamsGameName}"
+									columnName="#{meterTable.aamsGameNameColumnName}" arrow="true"
+									value="#{meterTable.aamsGameNameColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.game_name}" style="width: 150px;"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="columnDataGame" groupOn="#{item.data}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerDay_locations}"
+									columnName="#{meterTable.dayColumnName}" arrow="true"
+									value="#{meterTable.dayColumnName}">
+
+								</ice:commandSortHeader>
+							</f:facet>							
+							<ice:outputText value="#{item.data}" visible="#{!meterTable.mostraTotale_game}" styleClass="iceOutTxtDate"><f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="#{meterTable.timeZone}"/></ice:outputText>
+							<ice:outputText value="#{item.periodo}" visible="#{meterTable.mostraTotale_game}" styleClass="iceOutTxtDate"/>		
+						</ice:column>
+						
+						<ice:column id="column789" rendered="#{meterTable.mostraTotale_game}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									columnName="G.Attivita"
+									actionListener="#{meterTable.ordinaPerGattivita}"
+									arrow="true" value="G.Attivita" />
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.giorniGioco}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number" />
+							</ice:outputText>
+						</ice:column>
+						
+						<ice:column id="column5">
+							<f:facet name="header">
+								<ice:commandSortHeader columnName="#{meterTable.betColumnName}"
+									actionListener="#{meterTable.ordinaPerBet}" arrow="true"
+									value="#{meterTable.betColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.bet}">
+							 	<f:convertNumber maxFractionDigits="2" groupingUsed="true" 
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />   
+							</ice:outputText>
+						</ice:column>
+						
+						<ice:column id="column6">
+							<f:facet name="header">
+								<ice:commandSortHeader columnName="#{meterTable.winColumnName}"
+									actionListener="#{meterTable.ordinaPerWin}" arrow="true"
+									value="#{meterTable.winColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						
+						<ice:column id="column7">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									columnName="#{meterTable.gamesPlayedColumnName}"
+									actionListener="#{meterTable.ordinaPerGamesPlayed}"
+									arrow="true" value="#{meterTable.gamesPlayedColumnName}" />
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number" />
+							</ice:outputText>
+						</ice:column>
+						
+						<ice:column id="column16">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerJackpotWins}"
+									columnName="#{meterTable.jackpotWinsColumnName}" arrow="true"
+									value="#{meterTable.jackpotWinsColumnName}">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.jackpotWins}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="column17">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerJackpotContribution}"
+									columnName="#{meterTable.jackpotContributionColumnName}"
+									arrow="true"
+									value="#{meterTable.jackpotContributionColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.jackpotContribution}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="column18">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerPreu}"
+									columnName="#{meterTable.preuColumnName}" arrow="true"
+									value="#{meterTable.preuColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.preu}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="column19">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAams}"
+									columnName="#{meterTable.aamsColumnName}" arrow="true"
+									value="#{meterTable.aamsColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.aams}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="column20">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerNetWin}"
+									columnName="#{meterTable.netWinColumnName}" arrow="true"
+									value="#{meterTable.netWinColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.netWin}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="column21">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerHouseWin}"
+									columnName="#{meterTable.houseWinColumnName}" arrow="true"
+									value="#{meterTable.houseWinColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.houseWin}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="column22">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerSupplierProfit}"
+									columnName="#{meterTable.supplierProfitColumnName}"
+									arrow="true" value="#{meterTable.supplierProfitColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.supplierProfit}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="column23">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerOperatorsProfit}"
+									columnName="#{meterTable.operatorsProfitColumnName}"
+									arrow="true" value="#{meterTable.operatorsProfitColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.operatorsProfit}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="column24">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerBplusNetProfit}"
+									columnName="#{meterTable.bplusNetProfitColumnName}"
+									arrow="true" value="#{meterTable.bplusNetProfitColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.bplusNetProfit}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="column25">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerStato}"
+									columnName="#{meterTable.statoColumnName}" arrow="true"
+									value="#{meterTable.statoColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText value="#{item.stato}"></ice:outputText>
+						</ice:column>
+						<ice:column id="column26">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									
+									columnName="#{meterTable.noteColumnName}" arrow="true"
+									value="#{meterTable.noteColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText value="#{item.note}" style="width: 170px;"></ice:outputText>
+						</ice:column>
+					</ice:dataTable>
+					</div>
+					<br/>
+					<ice:dataPaginator id="dataScroll_3" for="lista_meter" 
+						paginator="true" fastStep="3" paginatorMaxPages="4"
+						rowsCountVar="rowsCount" 
+						displayedRowsCountVar="displayedRowsCount"
+						firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+						pageCountVar="pageCount" pageIndexVar="pageIndex" >
+						<f:facet name="first">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-first.gif"
+								style="border:none;" title="First Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="last">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-last.gif"
+								style="border:none;" title="Last Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="previous">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-previous.gif"
+								style="border:none;" title="Previous Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="next">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-next.gif"
+								style="border:none;" title="Next Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastforward">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-ff.gif"
+								style="border:none;" title="Fast Forward"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastrewind">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-fr.gif"
+								style="border:none;" title="Fast Backwards"></ice:graphicImage>
+						</f:facet>
+						<ice:outputFormat styleClass="standard"
+							value="{0} elementi trovati, sono visualizzati {1} elementi, da {2} a {3}.">
+							<f:param value="#{rowsCount}" />
+							<f:param value="#{displayedRowsCount}" />
+							<f:param value="#{firstRowIndex}" />
+							<f:param value="#{lastRowIndex}" />
+							<f:param value="#{pageIndex}" />
+							<f:param value="#{pageCount}" />
+						</ice:outputFormat>
+
+					</ice:dataPaginator>
+
+				</ice:panelTab>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				<ice:panelTab id="panel_tab_vlt" label="Dettagli per VLT">
+				
+				<ice:panelGrid columns="5">
+				<ice:dataExporter label="Esporta in xls" renderLabelAsButton="false" binding="#{meterTable.dataExporterXlsVlt}" image="./css/images/xls_icon.png"
+					for="panel_tab_set:panel_tab_vlt:lista_meter_vlt" ignorePagination="true" outputTypeHandler="#{meterTable.customExcelExporter}"
+					popupBlockerLabel="Popup Blocker detected - click here to resume download..."  /> 
+					&nbsp;
+				<ice:dataExporter label="Esporta in csv" renderLabelAsButton="false" binding="#{meterTable.dataExporterCsvVlt}" image="./css/images/csv_icon.png"
+					for="panel_tab_set:panel_tab_vlt:lista_meter_vlt" type="csv" ignorePagination="true"
+					popupBlockerLabel="Popup Blocker detected - click here to resume download..." />
+					
+					<ice:panelGroup style="padding-left: 60px;">
+						<h:commandButton value="Mostra singoli giorni"
+								action="#{meterTable.mostraSingoliGiorni_vlt}"
+								disabled="#{!meterTable.mostraTotale_vlt}" style="font-weight: bold; width:160px;" />
+						<br />
+						<h:commandButton value="Mostra totale"
+								action="#{meterTable.mostraTotale_vlt}"
+								disabled="#{meterTable.mostraTotale_vlt}"  style="font-weight: bold; width:160px;" />
+					</ice:panelGroup>
+					
+						<ice:panelGroup style="padding-left: 60px;">
+							<h:commandButton value="Mostra sale non aperte"
+								action="#{meterTable.mostraSaleNonAperte_vlt}"
+								disabled="#{!meterTable.nascondiSaleNonAperte_vlt}" style="font-weight: bold; width:160px;" />
+							<br />
+							<h:commandButton value="Nascondi sale non aperte"
+								action="#{meterTable.nascondiSaleNonAperte_vlt}"
+								disabled="#{meterTable.nascondiSaleNonAperte_vlt}" style="font-weight: bold;  width:160px;" />
+						</ice:panelGroup> 
+				</ice:panelGrid>
+				<br />
+				
+				<div class="divStyle" >
+					<ice:dataTable width="95%" id="lista_meter_vlt" border="1"
+						resizable="true"
+						columnClasses="columnClass"
+						rowClasses="oddRow, evenRow" styleClass="tableStyle" rows="20"
+						value="#{meterTable.meterList_vlt}" var="item">
+				
+						<ice:column id="vlt_columnProvincia" groupOn="#{item.provincia}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerProvincia_vlt}"
+									columnName="#{meterTable.provinciaColumnName}" arrow="true"
+									value="#{meterTable.provinciaColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.provincia}"></ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_columnComune" groupOn="#{item.comune}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerComune_vlt}"
+									columnName="#{meterTable.comuneColumnName}" arrow="true"
+									value="#{meterTable.comuneColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.comune}"></ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_columnCodGestore" groupOn="#{item.cod_gestore}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerCodGestore_vlt}"
+									columnName="#{meterTable.codGestoreColumnName}" arrow="true"
+									value="#{meterTable.codGestoreColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.cod_gestore}"></ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_columnLocationAddress" groupOn="#{item.location_address}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerLocationAddress_vlt}"
+									columnName="#{meterTable.locationAddressColumnName}" arrow="true"
+									value="#{meterTable.locationAddressColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.location_address}" style="width: 150px;"></ice:outputText>
+						</ice:column>
+													
+						<ice:column id="vlt_columnAamsLocationId" groupOn="#{item.aams_location_id}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAamsLocationId_vlt}"
+									columnName="#{meterTable.aamsLocationIdColumnName}"
+									arrow="true" value="#{meterTable.aamsLocationIdColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.aams_location_id}"></ice:outputText>
+						</ice:column>
+
+						<ice:column id="vlt_columnLocationName" groupOn="#{item.location_name}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerLocationName_vlt}"
+									columnName="#{meterTable.locationNameColumnName}" arrow="true"
+									value="#{meterTable.locationNameColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.location_name}" style="width: 150px;"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="vlt_columnAamsVltId">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAamsVltId_vlt}"
+									columnName="#{meterTable.aamsVltIdColumnName}" arrow="true"
+									value="#{meterTable.aamsVltIdColumnName}" />
+							</f:facet>
+							<ice:panelGroup id="loc_name_pop" menuPopup="menuPopupAamsVltId">
+								<ice:outputText escape="false" value="#{item.aams_vlt_id}" id="aams_vlt_id_graphic"/>
+								<ice:menuPopup id="menuPopupAamsVltId">
+							 	<ice:menuItem id="mp0_vlt" value="Mostra grafici">
+									<ice:menuItem id="mp1_vlt" value="Grafico VLT">
+										<ice:menuItem id="mp3_vlt" value="Ultima settimana"  action="#{graphTable.clickMenuPopupLocation}">
+											<f:param name="clicked_location_id" value="#{item.aams_location_id}"/>
+											<f:param name="clicked_location_name" value="#{item.location_name}"/>
+											<f:param name="clicked_data1" value="#{meterTable.data2MenoSette}"/>
+											<f:param name="clicked_data2" value="#{meterTable.rpData2}"/>
+										</ice:menuItem>
+										<ice:menuItem id="mp4_vlt" value="Ultimo mese"  action="#{graphTable.clickMenuPopupLocation}">
+											<f:param name="clicked_location_id" value="#{item.aams_location_id}"/>
+											<f:param name="clicked_location_name" value="#{item.location_name}"/>
+											<f:param name="clicked_data1" value="#{meterTable.data2MenoTrenta}"/>
+											<f:param name="clicked_data2" value="#{meterTable.rpData2}"/>
+										</ice:menuItem>
+										<ice:menuItem id="mp5_vlt" value="Periodo selezionato"  action="#{graphTable.clickMenuPopupLocation}">
+											<f:param name="clicked_location_id" value="#{item.aams_location_id}"/>
+											<f:param name="clicked_location_name" value="#{item.location_name}"/>
+											<f:param name="clicked_data1" value="#{meterTable.rpData1}"/>
+											<f:param name="clicked_data2" value="#{meterTable.rpData2}"/>
+										</ice:menuItem>
+									</ice:menuItem>
+							<!--  	<ice:menuItem id="mp2" value="Grafico VLT"/>
+									<ice:menuItem id="mp3" value="Grafico gioco"/> -->
+								</ice:menuItem> 
+								<ice:menuItem id="mp101_vlt" value="Dettagli Giochi Installati" action="#{meterTable.mdpvlt}">
+									<f:param name="vlt_id" value="#{item.aams_vlt_id}"/>
+								</ice:menuItem>
+								</ice:menuPopup>
+							</ice:panelGroup>
+						</ice:column>
+						
+						<ice:column id="vlt_columnGsVltId">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerGsVltId_vlt}"
+									columnName="#{meterTable.gsVltIdColumnName}" arrow="true"
+									value="#{meterTable.gsVltIdColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.gs_vlt_id}"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="vlt_column3" groupOn="#{item.data}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerDay_vlt}"
+									columnName="#{meterTable.dayColumnName}" arrow="true"
+									value="#{meterTable.dayColumnName}" style="width: 50px;">
+
+								</ice:commandSortHeader>
+							</f:facet>							
+							<ice:outputText value="#{item.data}" visible="#{!meterTable.mostraTotale_vlt}" styleClass="iceOutTxtDate"><f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="#{meterTable.timeZone}"/></ice:outputText>
+							<ice:outputText value="#{item.periodo}" visible="#{meterTable.mostraTotale_vlt}" styleClass="iceOutTxtDate"/>		
+						</ice:column>
+						
+						<ice:column id="vlt_column5">
+							<f:facet name="header">
+								<ice:commandSortHeader columnName="#{meterTable.betColumnName}"
+									actionListener="#{meterTable.ordinaPerBet_vlt}" arrow="true"
+									value="#{meterTable.betColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText value="#{item.bet}" styleClass="iceOutTxtNumber">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column6">
+							<f:facet name="header">
+								<ice:commandSortHeader columnName="#{meterTable.winColumnName}"
+									actionListener="#{meterTable.ordinaPerWin_vlt}" arrow="true"
+									value="#{meterTable.winColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT"/>
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column7">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									columnName="#{meterTable.gamesPlayedColumnName}"
+									actionListener="#{meterTable.ordinaPerGamesPlayed_vlt}"
+									arrow="true" value="#{meterTable.gamesPlayedColumnName}" />
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column8">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTotalIn_vlt}"
+									columnName="#{meterTable.totalInColumnName}" arrow="true"
+									value="#{meterTable.totalInColumnName}" style="width: 40px;"> 
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.totalIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column9">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTotalOut_vlt}"
+									columnName="#{meterTable.totalOutColumnName}" arrow="true"
+									value="#{meterTable.totalOutColumnName}" style="width: 45px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.totalOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column10">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTicketIn_vlt}"
+									columnName="#{meterTable.ticketInColumnName}" arrow="true"
+									value="#{meterTable.ticketInColumnName}" style="width: 43px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.ticketIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column11">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTicketOut_vlt}"
+									columnName="#{meterTable.ticketOutColumnName}" arrow="true"
+									value="#{meterTable.ticketOutColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.ticketOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column12">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerCoinIn_vlt}"
+									columnName="#{meterTable.coinInColumnName}" arrow="true"
+									value="#{meterTable.coinInColumnName}" style="width: 35px;">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.coinIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column13">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerBillIn_vlt}"
+									columnName="#{meterTable.billInColumnName}" arrow="true"
+									value="#{meterTable.billInColumnName}" style="width: 35px;">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.billIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column14">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerCardIn_vlt}"
+									columnName="#{meterTable.cardInColumnName}" arrow="true"
+									value="#{meterTable.cardInColumnName}" style="width: 38px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.cardIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column15">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTotalPrepaidIn_vlt}"
+									columnName="#{meterTable.totalPrepaidInColumnName}"
+									arrow="true" value="#{meterTable.totalPrepaidInColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.totalPrepaidIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column16">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerJackpotWins_vlt}"
+									columnName="#{meterTable.jackpotWinsColumnName}" arrow="true"
+									value="#{meterTable.jackpotWinsColumnName}">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.jackpotWins}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column17">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerJackpotContribution_vlt}"
+									columnName="#{meterTable.jackpotContributionColumnName}"
+									arrow="true"
+									value="#{meterTable.jackpotContributionColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.jackpotContribution}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column18">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerPreu_vlt}"
+									columnName="#{meterTable.preuColumnName}" arrow="true"
+									value="#{meterTable.preuColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.preu}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column19">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAams_vlt}"
+									columnName="#{meterTable.aamsColumnName}" arrow="true"
+									value="#{meterTable.aamsColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.aams}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column20">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerNetWin_vlt}"
+									columnName="#{meterTable.netWinColumnName}" arrow="true"
+									value="#{meterTable.netWinColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.netWin}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column21">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerHouseWin_vlt}"
+									columnName="#{meterTable.houseWinColumnName}" arrow="true"
+									value="#{meterTable.houseWinColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.houseWin}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column22">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerSupplierProfit_vlt}"
+									columnName="#{meterTable.supplierProfitColumnName}"
+									arrow="true" value="#{meterTable.supplierProfitColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.supplierProfit}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column23">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerOperatorsProfit_vlt}"
+									columnName="#{meterTable.operatorsProfitColumnName}"
+									arrow="true" value="#{meterTable.operatorsProfitColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.operatorsProfit}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column24">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerBplusNetProfit_vlt}"
+									columnName="#{meterTable.bplusNetProfitColumnName}"
+									arrow="true" value="#{meterTable.bplusNetProfitColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.bplusNetProfit}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column25">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerStato_vlt}"
+									columnName="#{meterTable.statoColumnName}" arrow="true"
+									value="#{meterTable.statoColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText value="#{item.stato}"></ice:outputText>
+						</ice:column>
+						<ice:column id="vlt_column26">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									
+									columnName="#{meterTable.noteColumnName}" arrow="true"
+									value="#{meterTable.noteColumnName}" >
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText value="#{item.note}" style="width: 160px;"></ice:outputText>
+						</ice:column>
+					</ice:dataTable>
+					</div>
+					<br/>
+					<ice:dataPaginator id="dataScroll_vlt" for="lista_meter_vlt"
+						paginator="true" fastStep="3" paginatorMaxPages="4"
+						rowsCountVar="rowsCount" 
+						displayedRowsCountVar="displayedRowsCount"
+						firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+						pageCountVar="pageCount" pageIndexVar="pageIndex">
+						<f:facet name="first">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-first.gif"
+								style="border:none;" title="First Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="last">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-last.gif"
+								style="border:none;" title="Last Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="previous">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-previous.gif"
+								style="border:none;" title="Previous Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="next">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-next.gif"
+								style="border:none;" title="Next Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastforward">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-ff.gif"
+								style="border:none;" title="Fast Forward"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastrewind">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-fr.gif"
+								style="border:none;" title="Fast Backwards"></ice:graphicImage>
+						</f:facet>
+						<ice:outputFormat styleClass="standard"
+							value="{0} elementi trovati (giorni macchina), sono visualizzati {1} elementi, da {2} a {3}.">
+							<f:param value="#{rowsCount}" />
+							<f:param value="#{displayedRowsCount}" />
+							<f:param value="#{firstRowIndex}" />
+							<f:param value="#{lastRowIndex}" />
+							<f:param value="#{pageIndex}" />
+							<f:param value="#{pageCount}" />
+						</ice:outputFormat>
+
+					</ice:dataPaginator>
+				</ice:panelTab>
+				
+				<ice:panelTab id="panel_tab_locations"  label="Dettagli per sala">
+					<ice:panelGrid columns="5">
+						<ice:dataExporter label="Esporta in xls" renderLabelAsButton="false" binding="#{meterTable.dataExporterXlsLocation}" image="./css/images/xls_icon.png"
+							for="panel_tab_set:panel_tab_locations:lista_meter_locations" type="excel" ignorePagination="true" outputTypeHandler="#{meterTable.customExcelExporter}"
+							popupBlockerLabel="Popup Blocker detected - click here to resume download..." />
+						&nbsp;
+						<ice:dataExporter label="Esporta in csv" renderLabelAsButton="false" binding="#{meterTable.dataExporterCsvLocation}" image="./css/images/csv_icon.png"
+							for="panel_tab_set:panel_tab_locations:lista_meter_locations" type="csv" ignorePagination="true"
+							popupBlockerLabel="Popup Blocker detected - click here to resume download..." />
+					
+						<ice:panelGroup style="padding-left: 60px;">
+							<h:commandButton value="Mostra singoli giorni"
+								action="#{meterTable.mostraSingoliGiorni_location}"
+								disabled="#{!meterTable.mostraTotale_location}" style="font-weight: bold; width:160px;" />
+							<br />
+							<h:commandButton value="Mostra totale"
+								action="#{meterTable.mostraTotale_location}"
+								disabled="#{meterTable.mostraTotale_location}" style="font-weight: bold; width:160px;" />
+						</ice:panelGroup>
+						
+						<ice:panelGroup style="padding-left: 60px;">
+							<h:commandButton value="Mostra sale non aperte"
+								action="#{meterTable.mostraSaleNonAperte_location}"
+								disabled="#{!meterTable.nascondiSaleNonAperte_location}" style="font-weight: bold; width:160px;" />
+							<br />
+							<h:commandButton value="Nascondi sale non aperte"
+								action="#{meterTable.nascondiSaleNonAperte_location}"
+								disabled="#{meterTable.nascondiSaleNonAperte_location}" style="font-weight: bold;  width:160px;" />
+						</ice:panelGroup> 
+					</ice:panelGrid>
+					<br />
+				
+				<div class="divStyle" >
+					<ice:dataTable id="lista_meter_locations" border="1"
+						resizable="true" 
+						columnClasses="columnClass"
+						rowClasses="oddRow, evenRow" styleClass="tableStyle" rows="20"
+						value="#{meterTable.meterList_location}" var="item">
+						
+						<ice:column id="locations_columnRegione" groupOn="#{item.regione}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerRegione_locations}"
+									columnName="#{meterTable.regioneColumnName}" arrow="true"
+									value="#{meterTable.regioneColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.regione}" style="width: 120px;"></ice:outputText>
+						</ice:column>																								
+						<ice:column id="locations_columnProvincia" groupOn="#{item.provincia}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerProvincia_locations}"
+									columnName="#{meterTable.provinciaColumnName}" arrow="true"
+									value="#{meterTable.provinciaColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.provincia}"></ice:outputText>
+						</ice:column>
+						<ice:column id="locations_columnComune" groupOn="#{item.comune}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerComune_locations}"
+									columnName="#{meterTable.comuneColumnName}" arrow="true"
+									value="#{meterTable.comuneColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.comune}"></ice:outputText>
+						</ice:column>
+						
+						<ice:column id="locations_columnLocationAddress" groupOn="#{item.location_address}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerLocationAddress_locations}"
+									columnName="#{meterTable.locationAddressColumnName}" arrow="true"
+									value="#{meterTable.locationAddressColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.location_address}" style="width: 150px;"></ice:outputText>
+						</ice:column>
+						<ice:column id="locations_columnCodGestore" groupOn="#{item.cod_gestore}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerCodGestore_locations}"
+									columnName="#{meterTable.codGestoreColumnName}" arrow="true"
+									value="#{meterTable.codGestoreColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.cod_gestore}"></ice:outputText>
+						</ice:column>
+						<ice:column id="locations_columnAamsLocationId" groupOn="#{item.aams_location_id}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAamsLocationId_locations}"
+									columnName="#{meterTable.aamsLocationIdColumnName}"
+									arrow="true" value="#{meterTable.aamsLocationIdColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.aams_location_id}"></ice:outputText>
+						</ice:column>
+
+						<ice:column id="locations_columnLocationName" groupOn="#{item.location_name}">						
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerLocationName_locations}"
+									columnName="#{meterTable.locationNameColumnName}" arrow="true"
+									value="#{meterTable.locationNameColumnName}" />
+							</f:facet>
+							<ice:panelGroup id="loc_name_pop" menuPopup="menuPopupLocName">
+								<ice:outputText escape="false" value="#{item.location_name}" id="location_name_graphic"
+									style="width: 150px;"></ice:outputText>
+								<ice:menuPopup id="menuPopupLocName">
+								<ice:menuItem id="mp0" value="Mostra grafici">
+									<ice:menuItem id="mp1" value="Grafico sala">
+										<ice:menuItem id="mp3" value="Ultima settimana"  action="#{graphTable.clickMenuPopupLocation}">
+											<f:param name="clicked_location_id" value="#{item.aams_location_id}"/>
+											<f:param name="clicked_location_name" value="#{item.location_name}"/>
+											<f:param name="clicked_data1" value="#{meterTable.data2MenoSette}"/>
+											<f:param name="clicked_data2" value="#{meterTable.rpData2}"/>
+										</ice:menuItem>
+										<ice:menuItem id="mp4" value="Ultimo mese"  action="#{graphTable.clickMenuPopupLocation}">
+											<f:param name="clicked_location_id" value="#{item.aams_location_id}"/>
+											<f:param name="clicked_location_name" value="#{item.location_name}"/>
+											<f:param name="clicked_data1" value="#{meterTable.data2MenoTrenta}"/>
+											<f:param name="clicked_data2" value="#{meterTable.rpData2}"/>
+										</ice:menuItem>
+										<ice:menuItem id="mp5" value="Periodo selezionato"  action="#{graphTable.clickMenuPopupLocation}">
+											<f:param name="clicked_location_id" value="#{item.aams_location_id}"/>
+											<f:param name="clicked_location_name" value="#{item.location_name}"/>
+											<f:param name="clicked_data1" value="#{meterTable.rpData1}"/>
+											<f:param name="clicked_data2" value="#{meterTable.rpData2}"/>
+										</ice:menuItem>
+									</ice:menuItem>
+							<!--  	<ice:menuItem id="mp2" value="Grafico VLT"/>
+									<ice:menuItem id="mp3" value="Grafico gioco"/> -->
+								</ice:menuItem>
+								<ice:menuItem id="mp101" value="Dettagli VLT / Giorni Macchina" action="#{meterTable.mdplocation}">
+									<f:param name="loc_id" value="#{item.aams_location_id}"/>
+								</ice:menuItem>
+								</ice:menuPopup>
+							</ice:panelGroup>
+						</ice:column>
+										
+						<ice:column id="locations_columnNumVlt">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerNumVlt_locations}"
+									columnName="#{meterTable.numVltColumnName}" arrow="true"
+									value="#{meterTable.numVltColumnName}">
+
+								</ice:commandSortHeader>
+							</f:facet>							
+							<ice:outputText value="#{item.numVlt}" styleClass="iceOutTxtNumber"/>
+						</ice:column>							
+						
+						<ice:column id="locations_column3" groupOn="#{item.data}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerDay_locations}"
+									columnName="#{meterTable.dayColumnName}" arrow="true"
+									value="#{meterTable.dayColumnName}">
+
+								</ice:commandSortHeader>
+							</f:facet>							
+							<ice:outputText value="#{item.data}" visible="#{!meterTable.mostraTotale_location}" styleClass="iceOutTxtDate"><f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="#{meterTable.timeZone}"/></ice:outputText>
+							<ice:outputText value="#{item.periodo}" visible="#{meterTable.mostraTotale_location}" styleClass="iceOutTxtDate"/>		
+						</ice:column>
+						
+						<ice:column id="locations_column5">
+							<f:facet name="header">
+								<ice:commandSortHeader columnName="#{meterTable.betColumnName}"
+									actionListener="#{meterTable.ordinaPerBet_locations}" arrow="true"
+									value="#{meterTable.betColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.bet}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT"/>
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column6">
+							<f:facet name="header">
+								<ice:commandSortHeader columnName="#{meterTable.winColumnName}"
+									actionListener="#{meterTable.ordinaPerWin_locations}" arrow="true"
+									value="#{meterTable.winColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column>
+							<f:facet name="header">
+								<ice:commandSortHeader
+									columnName="#{meterTable.gamesPlayedColumnName}"
+									actionListener="#{meterTable.ordinaPerGamesPlayed_locations}"
+									arrow="true" value="#{meterTable.gamesPlayedColumnName}" />
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column8">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTotalIn_locations}"
+									columnName="#{meterTable.totalInColumnName}" arrow="true"
+									value="#{meterTable.totalInColumnName}" style="width: 40px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.totalIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column9">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTotalOut_locations}"
+									columnName="#{meterTable.totalOutColumnName}" arrow="true"
+									value="#{meterTable.totalOutColumnName}" style="width: 45px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.totalOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column10">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTicketIn_locations}"
+									columnName="#{meterTable.ticketInColumnName}" arrow="true"
+									value="#{meterTable.ticketInColumnName}" style="width: 43px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.ticketIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column11">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTicketOut_locations}"
+									columnName="#{meterTable.ticketOutColumnName}" arrow="true"
+									value="#{meterTable.ticketOutColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.ticketOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column12">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerCoinIn_locations}"
+									columnName="#{meterTable.coinInColumnName}" arrow="true"
+									value="#{meterTable.coinInColumnName}" style="width: 35px;">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.coinIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column13">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerBillIn_locations}"
+									columnName="#{meterTable.billInColumnName}" arrow="true"
+									value="#{meterTable.billInColumnName}" style="width: 35px;">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.billIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column14">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerCardIn_locations}"
+									columnName="#{meterTable.cardInColumnName}" arrow="true"
+									value="#{meterTable.cardInColumnName}" style="width: 38px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.cardIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column15">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTotalPrepaidIn_locations}"
+									columnName="#{meterTable.totalPrepaidInColumnName}"
+									arrow="true" value="#{meterTable.totalPrepaidInColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.totalPrepaidIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column16">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerJackpotWins_locations}"
+									columnName="#{meterTable.jackpotWinsColumnName}" arrow="true"
+									value="#{meterTable.jackpotWinsColumnName}">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.jackpotWins}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column17">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerJackpotContribution_locations}"
+									columnName="#{meterTable.jackpotContributionColumnName}"
+									arrow="true"
+									value="#{meterTable.jackpotContributionColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.jackpotContribution}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column18">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerPreu_locations}"
+									columnName="#{meterTable.preuColumnName}" arrow="true"
+									value="#{meterTable.preuColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.preu}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column19">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAams_locations}"
+									columnName="#{meterTable.aamsColumnName}" arrow="true"
+									value="#{meterTable.aamsColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.aams}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column20">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerNetWin_locations}"
+									columnName="#{meterTable.netWinColumnName}" arrow="true"
+									value="#{meterTable.netWinColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.netWin}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column21">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerHouseWin_locations}"
+									columnName="#{meterTable.houseWinColumnName}" arrow="true"
+									value="#{meterTable.houseWinColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.houseWin}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column22">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerSupplierProfit_locations}"
+									columnName="#{meterTable.supplierProfitColumnName}"
+									arrow="true" value="#{meterTable.supplierProfitColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.supplierProfit}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column23">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerOperatorsProfit_locations}"
+									columnName="#{meterTable.operatorsProfitColumnName}"
+									arrow="true" value="#{meterTable.operatorsProfitColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.operatorsProfit}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column24">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerBplusNetProfit_locations}"
+									columnName="#{meterTable.bplusNetProfitColumnName}"
+									arrow="true" value="#{meterTable.bplusNetProfitColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.bplusNetProfit}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						
+						<ice:column id="locations_column26">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									
+									columnName="#{meterTable.noteColumnName}" arrow="true"
+									value="#{meterTable.noteColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText value="#{item.note}" style="width: 160px;"></ice:outputText>
+						</ice:column>						
+					</ice:dataTable>
+					</div>
+					<br/>
+					<ice:dataPaginator id="dataScroll_locations" for="lista_meter_locations"
+						paginator="true" fastStep="3" paginatorMaxPages="4"
+						rowsCountVar="rowsCount" 
+						displayedRowsCountVar="displayedRowsCount"
+						firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+						pageCountVar="pageCount" pageIndexVar="pageIndex">
+						<f:facet name="first">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-first.gif"
+								style="border:none;" title="First Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="last">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-last.gif"
+								style="border:none;" title="Last Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="previous">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-previous.gif"
+								style="border:none;" title="Previous Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="next">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-next.gif"
+								style="border:none;" title="Next Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastforward">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-ff.gif"
+								style="border:none;" title="Fast Forward"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastrewind">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-fr.gif"
+								style="border:none;" title="Fast Backwards"></ice:graphicImage>
+						</f:facet>
+						<ice:outputFormat styleClass="standard"
+							value="{0} elementi trovati, sono visualizzati {1} elementi, da {2} a {3}.">
+							<f:param value="#{rowsCount}" />
+							<f:param value="#{displayedRowsCount}" />
+							<f:param value="#{firstRowIndex}" />
+							<f:param value="#{lastRowIndex}" />
+							<f:param value="#{pageIndex}" />
+							<f:param value="#{pageCount}" />
+						</ice:outputFormat>
+
+					</ice:dataPaginator>
+				</ice:panelTab>
+				
+				
+				
+				
+				<ice:panelTab id="panel_tab_regioni"  label="Dettagli per regione">
+					<ice:panelGrid columns="5">
+						<ice:dataExporter label="Esporta in xls" renderLabelAsButton="false" binding="#{meterTable.dataExporterXlsRegioni}" image="./css/images/xls_icon.png"
+							for="panel_tab_set:panel_tab_regioni:lista_meter_regioni" type="excel" ignorePagination="true" outputTypeHandler="#{meterTable.customExcelExporter}"
+							popupBlockerLabel="Popup Blocker detected - click here to resume download..." />
+						&nbsp;
+						<ice:dataExporter label="Esporta in csv" renderLabelAsButton="false" binding="#{meterTable.dataExporterCsvRegioni}" image="./css/images/csv_icon.png"
+							for="panel_tab_set:panel_tab_regioni:lista_meter_regioni" type="csv" ignorePagination="true"
+						popupBlockerLabel="Popup Blocker detected - click here to resume download..." />
+					
+	
+			
+					<ice:panelGroup style="padding-left: 60px;">
+						<h:commandButton value="Mostra singoli giorni"
+								action="#{meterTable.mostraSingoliGiorni_regioni}"
+								disabled="#{!meterTable.mostraTotale_regioni}" style="font-weight: bold; width:160px;" />
+						<br />
+						<h:commandButton value="Mostra totale"
+								action="#{meterTable.mostraTotale_regioni}"
+								disabled="#{meterTable.mostraTotale_regioni}" style="font-weight: bold;  width:160px;" />
+					</ice:panelGroup> 
+					
+					<ice:panelGroup style="padding-left: 60px;">
+							<h:commandButton value="Includi sale non aperte"
+								action="#{meterTable.includiSaleNonAperte_regioni}"
+								disabled="#{!meterTable.escludiSaleNonAperte_regioni}" style="font-weight: bold; width:160px;" />
+							<br />
+							<h:commandButton value="Escludi sale non aperte"
+								action="#{meterTable.escludiSaleNonAperte_regioni}"
+								disabled="#{meterTable.escludiSaleNonAperte_regioni}" style="font-weight: bold;  width:160px;" />
+						</ice:panelGroup> 
+					
+				</ice:panelGrid>
+				<br />
+				
+				<div class="divStyle" >
+					<ice:dataTable id="lista_meter_regioni" border="1"
+						resizable="true" 
+						columnClasses="columnClass"
+						rowClasses="oddRow, evenRow" styleClass="tableStyle" rows="20"
+						value="#{meterTable.meterList_regioni}" var="item">
+																														
+						<ice:column id="regioni_columnRegione" >
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerProvincia_locations}"
+									columnName="#{meterTable.regioneColumnName}" arrow="true"
+									value="#{meterTable.regioneColumnName}" />
+							</f:facet>
+							<ice:outputText value="#{item.regione}" style="width: 120px;"></ice:outputText>
+						</ice:column>
+						<ice:column id="locations_columnNumVlt">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerNumVlt_locations}"
+									columnName="#{meterTable.numVltColumnName}" arrow="true"
+									value="#{meterTable.numVltColumnName}">
+
+								</ice:commandSortHeader>
+							</f:facet>							
+							<ice:outputText value="#{item.numVlt}" styleClass="iceOutTxtNumber"/>
+						</ice:column>							
+						
+						<ice:column id="locations_column3" groupOn="#{item.data}">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerDay_locations}"
+									columnName="#{meterTable.dayColumnName}" arrow="true"
+									value="#{meterTable.dayColumnName}">
+
+								</ice:commandSortHeader>
+							</f:facet>							
+							<ice:outputText value="#{item.data}" visible="#{!meterTable.mostraTotale_regioni}" styleClass="iceOutTxtDate"><f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="#{meterTable.timeZone}"/></ice:outputText>
+							<ice:outputText value="#{item.periodo}" visible="#{meterTable.mostraTotale_regioni}" styleClass="iceOutTxtDate"/>		
+						</ice:column>
+						
+						<ice:column id="locations_column5">
+							<f:facet name="header">
+								<ice:commandSortHeader columnName="#{meterTable.betColumnName}"
+									actionListener="#{meterTable.ordinaPerBet_locations}" arrow="true"
+									value="#{meterTable.betColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.bet}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT"/>
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column6">
+							<f:facet name="header">
+								<ice:commandSortHeader columnName="#{meterTable.winColumnName}"
+									actionListener="#{meterTable.ordinaPerWin_locations}" arrow="true"
+									value="#{meterTable.winColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column>
+							<f:facet name="header">
+								<ice:commandSortHeader
+									columnName="#{meterTable.gamesPlayedColumnName}"
+									actionListener="#{meterTable.ordinaPerGamesPlayed_locations}"
+									arrow="true" value="#{meterTable.gamesPlayedColumnName}" />
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column8">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTotalIn_locations}"
+									columnName="#{meterTable.totalInColumnName}" arrow="true"
+									value="#{meterTable.totalInColumnName}" style="width: 40px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.totalIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column9">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTotalOut_locations}"
+									columnName="#{meterTable.totalOutColumnName}" arrow="true"
+									value="#{meterTable.totalOutColumnName}" style="width: 45px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.totalOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column10">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTicketIn_locations}"
+									columnName="#{meterTable.ticketInColumnName}" arrow="true"
+									value="#{meterTable.ticketInColumnName}" style="width: 43px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.ticketIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column11">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTicketOut_locations}"
+									columnName="#{meterTable.ticketOutColumnName}" arrow="true"
+									value="#{meterTable.ticketOutColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.ticketOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column12">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerCoinIn_locations}"
+									columnName="#{meterTable.coinInColumnName}" arrow="true"
+									value="#{meterTable.coinInColumnName}" style="width: 35px;">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.coinIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column13">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerBillIn_locations}"
+									columnName="#{meterTable.billInColumnName}" arrow="true"
+									value="#{meterTable.billInColumnName}" style="width: 35px;">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.billIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column14">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerCardIn_locations}"
+									columnName="#{meterTable.cardInColumnName}" arrow="true"
+									value="#{meterTable.cardInColumnName}" style="width: 38px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.cardIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column15">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerTotalPrepaidIn_locations}"
+									columnName="#{meterTable.totalPrepaidInColumnName}"
+									arrow="true" value="#{meterTable.totalPrepaidInColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.totalPrepaidIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column16">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerJackpotWins_locations}"
+									columnName="#{meterTable.jackpotWinsColumnName}" arrow="true"
+									value="#{meterTable.jackpotWinsColumnName}">
+
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.jackpotWins}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column17">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerJackpotContribution_locations}"
+									columnName="#{meterTable.jackpotContributionColumnName}"
+									arrow="true"
+									value="#{meterTable.jackpotContributionColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.jackpotContribution}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column18">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerPreu_locations}"
+									columnName="#{meterTable.preuColumnName}" arrow="true"
+									value="#{meterTable.preuColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.preu}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column19">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerAams_locations}"
+									columnName="#{meterTable.aamsColumnName}" arrow="true"
+									value="#{meterTable.aamsColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.aams}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column20">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerNetWin_locations}"
+									columnName="#{meterTable.netWinColumnName}" arrow="true"
+									value="#{meterTable.netWinColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.netWin}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column21">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerHouseWin_locations}"
+									columnName="#{meterTable.houseWinColumnName}" arrow="true"
+									value="#{meterTable.houseWinColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.houseWin}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column22">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerSupplierProfit_locations}"
+									columnName="#{meterTable.supplierProfitColumnName}"
+									arrow="true" value="#{meterTable.supplierProfitColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.supplierProfit}" style="width: 60px;">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column23">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerOperatorsProfit_locations}"
+									columnName="#{meterTable.operatorsProfitColumnName}"
+									arrow="true" value="#{meterTable.operatorsProfitColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.operatorsProfit}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column id="locations_column24">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									actionListener="#{meterTable.ordinaPerBplusNetProfit_locations}"
+									columnName="#{meterTable.bplusNetProfitColumnName}"
+									arrow="true" value="#{meterTable.bplusNetProfitColumnName}" style="width: 50px;">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText styleClass="iceOutTxtNumber" value="#{item.bplusNetProfit}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						
+						<ice:column id="locations_column26">
+							<f:facet name="header">
+								<ice:commandSortHeader
+									
+									columnName="#{meterTable.noteColumnName}" arrow="true"
+									value="#{meterTable.noteColumnName}">
+								</ice:commandSortHeader>
+							</f:facet>
+							<ice:outputText value="#{item.note}" style="width: 160px;"></ice:outputText>
+						</ice:column>						
+					</ice:dataTable>
+					</div>
+					<br/>
+					<ice:dataPaginator id="dataScroll_regioni" for="lista_meter_regioni"
+						paginator="true" fastStep="3" paginatorMaxPages="4"
+						rowsCountVar="rowsCount" 
+						displayedRowsCountVar="displayedRowsCount"
+						firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+						pageCountVar="pageCount" pageIndexVar="pageIndex">
+						<f:facet name="first">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-first.gif"
+								style="border:none;" title="First Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="last">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-last.gif"
+								style="border:none;" title="Last Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="previous">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-previous.gif"
+								style="border:none;" title="Previous Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="next">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-next.gif"
+								style="border:none;" title="Next Page"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastforward">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-ff.gif"
+								style="border:none;" title="Fast Forward"></ice:graphicImage>
+						</f:facet>
+						<f:facet name="fastrewind">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-fr.gif"
+								style="border:none;" title="Fast Backwards"></ice:graphicImage>
+						</f:facet>
+						<ice:outputFormat styleClass="standard"
+							value="{0} elementi trovati, sono visualizzati {1} elementi, da {2} a {3}.">
+							<f:param value="#{rowsCount}" />
+							<f:param value="#{displayedRowsCount}" />
+							<f:param value="#{firstRowIndex}" />
+							<f:param value="#{lastRowIndex}" />
+							<f:param value="#{pageIndex}" />
+							<f:param value="#{pageCount}" />
+						</ice:outputFormat>
+
+					</ice:dataPaginator>
+				</ice:panelTab>
+			</ice:panelTabSet>
+			
+		</h:form>
+	</ice:panelGroup>
+	
+	
+	<br/><br/>
+
+	
+		
+
+		
+
+
+
+	<!--  	<ui:include src="/footer.xhtml" />  -->
+	
+
+
+
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>
