@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service id="remoting-service"
+    class="flex.messaging.services.RemotingService">
+
+    <adapters>
+        <adapter-definition id="java-object" class="flex.messaging.services.remoting.adapters.JavaAdapter" default="true"/>
+    </adapters>
+
+    <default-channels>
+        <channel ref="my-amf"/>
+    </default-channels>
+    <destination id="SPSession">
+        <properties>
+            <source>serviseatl.session.SPSession</source>
+        </properties>
+    </destination>
+
+	<destination id="ReImport">
+        <properties>
+            <source>serviseatl.reimport.ReImport</source>
+        </properties>
+    </destination>
+
+    <destination id="SPCasinoWeb">
+        <properties>
+            <source>serviseatl.casinoweb.SPCasinoWeb</source>
+        </properties>
+    </destination>
+    <destination id="SPResultMeter">
+        <properties>
+            <source>serviseatl.resultmeter.SPResultMeter</source>
+        </properties>
+    </destination>
+
+    <destination id="SPTrend">
+        <properties>
+            <source>serviseatl.reportetrend.SPTrend</source>
+        </properties>
+    </destination>
+
+    <destination id="SPTrendMonth">
+        <properties>
+            <source>serviseatl.reportetrend.SPTrendMonth</source>
+        </properties>
+    </destination>
+	
+    <destination id="SPDisabledVlts">
+        <properties>
+            <source>serviseatl.disabledvlts.SPDisabledVlts</source>
+        </properties>
+    </destination>
+
+	<destination id="SPVLTsZeroesCount">
+        <properties>
+            <source>serviseatl.vltszeroes.SPVLTsZeroesCount</source>
+        </properties>
+    </destination>
+
+    <destination id="SPVLTsZeroesDate">
+        <properties>
+            <source>serviseatl.vltszeroes.SPVLTsZeroesDate</source>
+        </properties>
+    </destination>
+
+	<destination id="SPResultDate">
+        <properties>
+            <source>serviseatl.resultmeter.SPResultDate</source>
+        </properties>
+    </destination>
+    <destination id="SPResultMeterSummary">
+        <properties>
+            <source>serviseatl.resultmeter.SPResultMeterSummary</source>
+        </properties>
+    </destination>
+    <destination id="SPLastDateMeter">
+        <properties>
+            <source>serviseatl.lastdatemeter.SPLastDateMeter</source>
+        </properties>
+    </destination>
+    <destination id="SPBillEstimation">
+        <properties>
+            <source>serviseatl.billestimation.SPBillEstimation</source>
+        </properties>
+    </destination>
+    <destination id="SPSummaryCasinoV2">
+        <properties>
+            <source>serviseatl.summarycasinov2.SPSummaryCasinoV2</source>
+        </properties>
+    </destination>
+    <destination id="SPSummaryCasinoDate">
+        <properties>
+            <source>serviseatl.summarycasinodate.SPSummaryCasinoDate</source>
+        </properties>
+    </destination>
+    <destination id="SPSummaryCasinoMonth">
+        <properties>
+            <source>serviseatl.summarycasinomonth.SPSummaryCasinoMonth</source>
+        </properties>
+    </destination>
+    <destination id="SPReportMeter">
+        <properties>
+            <source>serviseatl.reportmeter.SPReportMeter</source>
+        </properties>
+    </destination>
+
+    <destination id="SPJackpotsHopperFills">
+        <properties>
+            <source>serviseatl.jackpotshopperfills.SPJackpotsHopperFills</source>
+        </properties>
+    </destination>
+
+    <destination id="SPProject">
+        <properties>
+            <source>serviseatl.project.SPProject</source>
+        </properties>
+    </destination>
+
+    <destination id="SPProjection">
+        <properties>
+            <source>serviseatl.projection.SPProjection</source>
+        </properties>
+    </destination>
+
+    <destination id="SPW_Raffle">
+        <properties>
+            <source>serviseatl.w_raffle.SPW_Raffle</source>
+        </properties>
+    </destination>
+
+    <destination id="SPYearlyGraphical">
+        <properties>
+            <source>serviseatl.yearlygraphical.SPYearlyGraphical</source>
+        </properties>
+    </destination>
+
+    <destination id="SPGraphicalDaily">
+        <properties>
+            <source>serviseatl.graphicaldaily.SPGraphicalDaily</source>
+        </properties>
+    </destination>
+
+    <destination id="SPCustomers">
+        <properties>
+            <source>serviseatl.customers.SPCustomers</source>
+        </properties>
+    </destination>
+
+    <destination id="RSCustomers">
+        <properties>
+            <source>serviseatl.customers.RSCustomers</source>
+        </properties>
+    </destination>
+
+    <destination id="SPMaxDailyCustomer">
+        <properties>
+            <source>serviseatl.customers.SPMaxDailyCustomer</source>
+        </properties>
+    </destination>
+
+    <destination id="SPAvgMystery">
+        <properties>
+            <source>serviseatl.mystery.SPAvgMystery</source>
+        </properties>
+    </destination>
+
+    <destination id="RSAvgMystery">
+        <properties>
+            <source>serviseatl.mystery.RSAvgMystery</source>
+        </properties>
+    </destination>
+
+    <destination id="SPDetailMonth">
+        <properties>
+            <source>serviseatl.mystery.SPDetailMonth</source>
+        </properties>
+    </destination>
+
+    <destination id="RSDetailMonth">
+        <properties>
+            <source>serviseatl.mystery.RSDetailMonth</source>
+        </properties>
+    </destination>
+
+    <destination id="SPGroupMysterys">
+        <properties>
+            <source>serviseatl.mystery.SPGroupMysterys</source>
+        </properties>
+    </destination>
+
+    <destination id="RSGroupMysterys">
+        <properties>
+            <source>serviseatl.mystery.RSGroupMysterys</source>
+        </properties>
+    </destination>
+
+    <destination id="SPLastPaids">
+        <properties>
+            <source>serviseatl.mystery.SPLastPaids</source>
+        </properties>
+    </destination>
+
+    <destination id="RSLastPaids">
+        <properties>
+            <source>serviseatl.mystery.RSLastPaids</source>
+        </properties>
+    </destination>
+
+    <destination id="SPGrupoTabla">
+        <properties>
+            <source>serviseatl.tables.SPGrupoTabla</source>
+        </properties>
+    </destination>
+
+    <destination id="SPTables1">
+        <properties>
+            <source>serviseatl.tables.SPTables1</source>
+        </properties>
+    </destination>
+
+    <destination id="SPTables2">
+        <properties>
+            <source>serviseatl.tables.SPTables2</source>
+        </properties>
+    </destination>
+
+    <destination id="SPTables3">
+        <properties>
+            <source>serviseatl.tables.SPTables3</source>
+        </properties>
+    </destination>
+
+    <destination id="SPPermisosFlex">
+        <properties>
+            <source>serviseatl.permisosFlex.SPPermisosFlex</source>
+        </properties>
+    </destination>
+
+    <destination id="SPIniciarSesion">
+        <properties>
+            <source>serviseatl_gis.iniciarsesion.SPIniciarSesion</source>
+        </properties>
+    </destination>
+    
+    <destination id="SPEstructura">
+        <properties>
+            <source>serviseatl_gis.estructura.SPEstructura</source>
+        </properties>
+    </destination>
+
+    <destination id="SPSlotGis">
+        <properties>
+            <source>serviseatl_gis.slotgis.SPSlotGis</source>
+        </properties>
+    </destination>
+
+    <destination id="SPBetMaquina">
+        <properties>
+            <source>serviseatl_gis.betmaquina.SPBetMaquina</source>
+        </properties>
+    </destination>
+
+    <destination id="SPRedeem">
+        <properties>
+            <source>serviseatl_gis.redeem.SPRedeem</source>
+        </properties>
+    </destination>
+
+    <destination id="SPRating">
+        <properties>
+            <source>serviseatl_gis.rating.SPRating</source>
+        </properties>
+    </destination>
+
+    <destination id="SPListaEstado">
+        <properties>
+            <source>serviseatl_gis.listaestado.SPListaEstado</source>
+        </properties>
+    </destination>
+
+    <destination id="SPTraffic">
+        <properties>
+            <source>serviseatl_gis.traffic.SPTraffic</source>
+        </properties>
+    </destination>
+
+    <destination id="SPJackpot">
+        <properties>
+            <source>serviseatl_gis.jackpot.SPJackpot</source>
+        </properties>
+    </destination>
+
+    <destination id="SPFabricante_E">
+        <properties>
+            <source>serviseatl.fabricante_e.SPFabricante_E</source>
+        </properties>
+    </destination>
+
+    <destination id="SPGame_E">
+        <properties>
+            <source>serviseatl.game_e.SPGame_E</source>
+        </properties>
+    </destination>
+
+    <destination id="SPGamesData_E">
+        <properties>
+            <source>serviseatl.gamesdata_e.SPGamesData_E</source>
+        </properties>
+    </destination>
+
+    <destination id="SPPercentages">
+        <properties>
+            <source>serviseatl.percentages.SPPercentages</source>
+        </properties>
+    </destination>
+
+    <destination id="SPModeloMaquina_E">
+        <properties>
+            <source>serviseatl.modelomaquina_e.SPModeloMaquina_E</source>
+        </properties>
+    </destination>
+
+    <destination id="SPNumMaquinas">
+        <properties>
+            <source>serviseatl.nummaquinas.SPNumMaquinas</source>
+        </properties>
+    </destination>
+
+    <destination id="SPTJuegos_E">
+        <properties>
+            <source>serviseatl.tjuegos_e.SPTJuegos_E</source>
+        </properties>
+    </destination>
+
+    <destination id="SPCabinets">
+        <properties>
+            <source>serviseatl.cabinets.SPCabinets</source>
+        </properties>
+    </destination>
+
+    <destination id="SPAreas_E">
+        <properties>
+            <source>serviseatl.areas_e.SPAreas_E</source>
+        </properties>
+    </destination>
+
+    <destination id="SPMoneda_E">
+        <properties>
+            <source>serviseatl.moneda_e.SPMoneda_E</source>
+        </properties>
+    </destination>
+
+    <destination id="SPLocation">
+        <properties>
+            <source>serviseatl.location.SPLocation</source>
+        </properties>
+    </destination>
+
+    <destination id="SPAlarmaMaxBet">
+        <properties>
+            <source>serviseatl.alarmamaxbet.SPAlarmaMaxBet</source>
+        </properties>
+    </destination>
+
+    <destination id="SPTopCustomer">
+        <properties>
+            <source>serviseatl.topcustomer.SPTopCustomer</source>
+        </properties>
+    </destination>
+
+    <destination id="SPEventos">
+        <properties>
+            <source>serviseatl.eventos.SPEventos</source>
+        </properties>
+    </destination>
+
+    <destination id="SPEvento">
+        <properties>
+            <source>serviseatl.eventos.SPEvento</source>
+        </properties>
+    </destination>
+
+    <destination id="SPDatosMaquina">
+        <properties>
+            <source>serviseatl.eventos.SPDatosMaquina</source>
+        </properties>
+    </destination>
+
+    <destination id="SPSASExceptions">
+        <properties>
+            <source>serviseatl.eventos.SPSASExceptions</source>
+        </properties>
+    </destination>
+
+    <destination id="SPJackpotList">
+        <properties>
+            <source>serviseatl.jackpotlist.SPJackpotList</source>
+        </properties>
+    </destination>
+
+    <destination id="SPEventoCritico">
+        <properties>
+            <source>serviseatl.eventos.SPEventoCritico</source>
+        </properties>
+    </destination>
+
+    <destination id="SPPrueba">
+        <properties>
+            <source>serviseatl.prueba.SPPrueba</source>
+        </properties>
+    </destination>
+
+    <destination id="productSqlServer">
+        <properties>
+            <source>flex.samples.product.ProductServiceSqlServer</source>
+        </properties>
+    </destination>
+    
+    <destination id="productSP">
+        <properties>
+            <source>flex.samples.product.ProductServiceSP</source>
+        </properties>
+    </destination>
+
+    <destination id="chat-room-service">
+        <properties>
+            <source>flex.samples.runtimeconfig.ChatRoomService</source>
+            <scope>application</scope>
+        </properties>
+    </destination>
+
+    <destination id="census">
+        <properties>
+            <source>flex.samples.census.CensusService</source>
+        </properties>
+    </destination>
+
+    <destination id="flex-client-qos-config" channels="per-client-qos-polling-amf">
+        <properties>
+            <source>flex.samples.qos.FlexClientConfigService</source>
+        </properties>
+    </destination>
+
+    
+  </service>
