@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"  
+    xmlns:h="http://java.sun.com/jsf/html"  
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+    >
+    
+    <p:layout>
+     	
+     	<p:layoutUnit position="west" size="16%" resizable="false" closable="false" collapsible="false" styleClass="layoutUnit-HeaderTop" style="float:left;">  
+	        <p:media value="/resources/media/world-2.swf" width="150px" height="50px" player="flash">  
+			    <f:param name="autoPlay" value="true" /> 
+			    <f:param name="wmode" value="transparent" /> 
+			</p:media>
+	    </p:layoutUnit>
+    
+	    <p:layoutUnit position="center" size="10%" resizable="false" closable="false" collapsible="false" styleClass="layoutUnit-HeaderTop">  
+
+				<table style="float:left;padding-right:10px;border-right:1px solid white;">
+					<tr>
+						<td><h:outputText value="Search all filtered fields:  " style="color:white;font-size:10px;" /></td>
+					</tr>
+					<tr>
+						<td><p:inputText id="globalFilter" onkeyup="locationsDataTable.filter()" styleClass="searchAll" style="width:120px" /></td>
+					</tr>
+				</table>
+				<table style="float:left;margin-left:10px;">
+					<tr>
+						<td><h:outputText value="Start Date:  " style="color:white;font-size:10px;" /></td>
+						<td><h:outputText value="End Date:  " style="color:white;font-size:10px;" /></td>
+					</tr>
+					<tr>
+			            <td><p:calendar id="startDate" styleClass="calendar" size="12" /></td>
+			            <td><p:calendar id="endDate" styleClass="calendar" size="12" /></td>
+			            <td><p:commandButton value="Filter" style="height:20px !important;"/></td>
+		        	</tr>
+		        </table>
+		        
+	    </p:layoutUnit>
+    
+	    <p:layoutUnit position="east" size="50%" resizable="false" closable="false" collapsible="false" styleClass="layoutUnit-HeaderTop">
+
+	    	<h:form id="logOutForm" prependId="false">
+	    	
+				<div style="float: left;text-align: right;color:white;font-size:10px;padding-top: 3%;text-align: right;">
+					<b>PAGINA:  </b><i id="">Summary</i>&nbsp;&nbsp;|&nbsp;&nbsp;
+					<b>#{msgs.label_username} </b><i id="">#{loginBean.loggedUser.getEmployeeName()}</i>&nbsp;&nbsp;|&nbsp;&nbsp;
+					<b>#{msgs.label_loginDate} </b>#{utilityBean.getDateFormatted(loginBean.loggedUser.loginDate, languageBean.dateTimePatternSelected)} &nbsp;	
+				</div>
+				
+				<div id="buttonsTopRight" style="margin-top:0.7%;">
+				
+					<div style="float: right;">
+						<ul class="button_changeBg">
+							<li>
+								<div class="iconBG">
+									<a class="buttonOpacity" title="Change Background" href="#" />
+								</div>
+								<ul id="nav">
+									<li>
+										<a href="#" onclick="switchThemeColor('betplus-blue')" title="Select Blue">
+											<h:graphicImage library="images" name="iconBg_blue.png" title="Select Blue" />
+										</a>
+									</li>
+									<li>
+										<a href="#" onclick="switchThemeColor('betplus-green')" title="Select Green">
+											<h:graphicImage library="images" name="iconBg_green.png" title="Select Green" />
+										</a>
+									</li>	
+									<li>
+										<a href="#" onclick="switchThemeColor('betplus-red')" title="Select Red">
+											<h:graphicImage library="images" name="iconBg_red.png" title="Select Red" />
+										</a>
+									</li>
+								</ul>
+							</li>
+						</ul>		
+					</div>
+					
+					<div class="button marginButton" style="float: right;">
+						<p:commandLink title="Export excel" ajax="false">
+						    <h:graphicImage name="images/excel.png" id="excel" onmouseover="this.styleClass='excel'" onmouseout="this.src='/WebReportingIntranet/javax.faces.resource/images/excel.png.xhtml'"/>
+						</p:commandLink>
+					</div>
+					
+					<div class="button marginButton" style="float: right;">
+						<p:commandLink action="#{loginBean.logout}" title="Logout" ajax="false" styleClass="logout">
+						    <h:graphicImage name="images/logout.png" />
+						</p:commandLink>
+					</div>
+					
+				</div>
+				
+				<p:inputText id="hiddenThemeColor" value="#{loginBean.theme}" ajax="true" style="visibility:hidden;" >
+					<p:ajax event="click" listener="#{loginBean.changeThemeAjax}" render="@all" />
+				</p:inputText>
+				
+			</h:form>
+			
+	    </p:layoutUnit>
+
+	</p:layout>
+	
+</ui:composition>
