@@ -1,0 +1,277 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
+	
+   
+<h:head>
+	<title>Betplus Business Intelligence's Reports and Statistics
+	System</title>
+
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+</h:head>
+<h:body styleClass="ice-skin-sam">
+	
+			<ui:include src="/intestazione.xhtml" />
+		
+			<ui:include src="/menu.xhtml" />
+	
+		
+			<h:messages layout="table" style="text-align:center; font-weight:bold; color:red;"/>
+					
+			<ice:panelGroup border="1" columns="1" id="pannelloRicerca"
+				style="left:50%; width:650px;">
+				<ice:form id="ricerca">
+
+					<br />
+					<ice:outputText value="Inserisci i parametri della ricerca: " />
+					<br />
+					<br />
+
+					<h:panelGrid border="0" columns="2"
+						style="height:100%; width:100%;">
+
+						
+
+
+					</h:panelGrid>
+
+					<br />
+					
+
+					<br />
+					<br />
+
+					<ice:panelTabSet tabPlacement="Top" style="width: 100%;"
+						id="pnMain" visible="#{(researchController.view=='list_res')}">
+						<ice:panelTab label="Elenco dati trovati" style="width: 100%;">
+							<ice:dataExporter id="dataExpoID"
+								clickToCreateFileText="click to create export file"
+								label="Esporta" for="listaMeterRicerca" type="csv"
+								ignorePagination="yes">
+							</ice:dataExporter>
+
+							<ice:dataTable id="listaMeterRicerca" rows="0" border="1"
+								rowClasses="oddRow, evenRow" styleClass="tableStyle"
+								value="#{researchController.ricercaList}" var="item">
+								<ice:column id="column5">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.betColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.betColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.bet}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column6">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.winColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.winColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.win}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column7">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.gamesPlayedColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.gamesPlayedColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.gamesPlayed}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column8">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.totalInColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.totalInColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.totalIn}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column9">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.totalOutColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.totalOutColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.totalOut}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column10">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.ticketInColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.ticketInColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.ticketIn}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column11">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.ticketOutColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.ticketOutColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.ticketOut}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column12">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.coinInColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.coinInColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.coinIn}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column13">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.billInColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.billInColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.billIn}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column14">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.cardInColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.cardInColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.cardIn}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column15">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.totalPrepaidInColumnName}"
+											arrow="true">
+											<ice:outputText
+												value="#{meterTable.totalPrepaidInColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.totalPrepaidIn}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column16">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.jackpotWinsColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.jackpotWinsColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.jackpotWins}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column17">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.jackpotContributionColumnName}"
+											arrow="true">
+											<ice:outputText
+												value="#{meterTable.jackpotContributionColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.jackpotContribution}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column18">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.preuColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.preuColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.preu}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column19">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.aamsColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.aamsColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.aams}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column20">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.netWinColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.netWinColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.netWin}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column21">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.houseWinColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.houseWinColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.houseWin}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column22">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.supplierProfitColumnName}"
+											arrow="true">
+											<ice:outputText
+												value="#{meterTable.supplierProfitColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.supplierProfit}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column23">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.operatorsProfitColumnName}"
+											arrow="true">
+											<ice:outputText
+												value="#{meterTable.operatorsProfitColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.operatorsProfit}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column24">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.bplusNetProfitColumnName}"
+											arrow="true">
+											<ice:outputText
+												value="#{meterTable.bplusNetProfitColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.bplusNetProfit}"></ice:outputText>
+								</ice:column>
+								<ice:column id="column25">
+									<f:facet name="header">
+										<ice:commandSortHeader
+											columnName="#{meterTable.statoColumnName}" arrow="true">
+											<ice:outputText value="#{meterTable.statoColumnName}" />
+										</ice:commandSortHeader>
+									</f:facet>
+									<ice:outputText value="#{item.stato}"></ice:outputText>
+								</ice:column>
+							</ice:dataTable>
+
+						</ice:panelTab>
+						<br />
+					</ice:panelTabSet>
+					<br />
+				</ice:form>
+			</ice:panelGroup>
+
+			<ui:include src="/footer.xhtml" />
+		
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>

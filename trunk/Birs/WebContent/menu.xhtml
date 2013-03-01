@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
+<h:head>
+	<title></title>
+	
+</h:head>
+<h:body styleClass="ice-skin-sam" >
+<script type="text/javascript">
+	function goHome(){
+		window.location = "/birs/home.xhtml";
+	}
+	function goUser(){
+		window.location = "/birs/utenti_page.xhtml";
+	}
+	function goGraphLoc(){
+		window.location = "/birs/graphloc.xhtml";
+	}
+	function goGraphVlt(){
+		window.location = "/birs/graphvlt.xhtml";
+	}
+	function goGraphGame(){
+		window.location = "/birs/graphgame.xhtml";
+	}
+	function goReportVltMilionarie(){
+		window.location = "/birs/millionvlt.xhtml";
+	}
+	function goHelp(){
+		window.location = "/birs/help.xhtml";
+	}
+	function goConfronto(){
+		window.location = "/birs/confr.xhtml";
+	}
+	function goFix(){
+		window.location = "/birs/fix.xhtml";
+	}
+	function goMondrian(){
+		window.location = "/birs/mondrian.xhtml";
+	}
+</script>
+
+<h:panelGroup id="menu" styleClass="TabMenu">
+<ice:form>
+	<ice:menuBar id="menuBar" orientation="Horizontal">
+             <ice:menuItem value="Home" id="menubarhome" onclick="goHome()" />
+             <ice:menuItem value="Gestione utenti" id="menubargest" onclick="goUser()" rendered="#{loginController.isAdmin}" disabled="#{!loginController.isAdmin}" visible="#{loginController.isAdmin}"/>
+			 <ice:menuItem value="Report" id="menubareport" onclick="goHome()" />			
+			 <ice:menuItem value="Grafici" id="menubargraph">
+			 	<ice:menuItem value="Dettagli per sala" id="menubargraphloc" onclick="goGraphLoc()" style=""/>
+			 	<ice:menuItem value="Dettagli per VLT" id="menubargraphvlt" onclick="goGraphVlt()"/>
+			 	<ice:menuItem value="Dettagli per gioco" id="menubargraphgame" onclick="goGraphGame()"/>
+			 </ice:menuItem>		
+			 <ice:menuItem value="Help" id="menubarhelp" onclick="goHelp()" />
+			 <ice:menuItem value="Test" id="menubartest" action="#{pageController.navigateTest}" rendered="#{loginController.isAdmin}" disabled="#{!loginController.isAdmin}" visible="#{loginController.isAdmin}"/>
+			 <ice:menuItem value="Vlt Milionarie" id="menubarvltmil" onclick="goReportVltMilionarie()"/>
+			 <ice:menuItem value="Confronto 600" id="menubar600" onclick="goConfronto()" />
+			 <ice:menuItem value="Fix" id="menubarfix" onclick="goFix()" />
+			  <ice:menuItem value="BI" id="menubarmondrian" onclick="goMondrian()" />
+			 
+			 <ice:menuItem value="Logout" style="float: right; align: right;" id="menubarlogout" action="#{loginController.logout}" />
+	
+	</ice:menuBar>	
+	</ice:form>
+</h:panelGroup>
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>

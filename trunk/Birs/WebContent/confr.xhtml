@@ -1,0 +1,1092 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	
+<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+<h:head>
+	<title>Betplus Business Intelligence's Reports and Statistics
+		System</title>
+	
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+	<meta http-equiv="pragma" content="no-cache"/>
+	<meta http-equiv="expires" content="0"/>	  
+</h:head>
+<h:body >
+	
+		<ui:include src="/intestazione.xhtml" />
+	
+		<ui:include src="/menu.xhtml" />
+
+
+	<script type="text/javascript">
+		function delayer() {
+			alert('La sessione è scaduta. Clicca sul pulsante per ricaricare la pagina.');
+			window.location = "/birs/confr.xhtml";
+		}
+
+		setTimeout("delayer()",	3660000); //il popup comparirà dopo 1 ora e 1 minuto
+		
+		jQuery("#id").hide();
+	</script>
+
+
+
+	<ice:panelGroup id="center" styleClass="TabCenter">
+		<h:form prependId="false">
+
+			<ice:panelGroup>
+			<table>
+				<tr>
+					<td><p:calendar value="#{seicentoTable.data1}" showOn="button" inputStyle="text-align: center" pattern="dd/MM/yyyy" locale="it" mindate="01/09/2010" maxdate="#{seicentoTable.oggi}"/></td>
+					<td><p:calendar value="#{seicentoTable.data2}" showOn="button" inputStyle="text-align: center" pattern="dd/MM/yyyy" locale="it" mindate="01/09/2010" maxdate="#{seicentoTable.oggi}"/></td>					
+					<td rowspan="4" style="width: 15px;">&nbsp;</td>
+					<td rowspan="4" valign="middle"><h:commandButton value="OK" 
+						style="font-size: 12px; width: 45px; height: 30px; "
+						action="#{seicentoTable.query}" /></td>
+					<td rowspan="4" valign="middle"><h:commandButton value="Reset" 
+						style="font-size: 10px; width: 45px; height: 30px; "
+						action="#{seicentoTable.svuota}" /></td>
+				</tr>
+				<tr><td><br/></td></tr>
+				<tr>
+					<td><ice:outputText value="Nome Sala" /></td>
+					<td><ice:outputText value="Codice sala" /></td>
+				</tr>
+				<tr>
+					<td><p:inputText value="#{seicentoTable.location_name}"
+								maxlength="100" style="width: 150px; " /></td>
+					<td><p:inputText value="#{seicentoTable.aams_location_id}"
+								maxlength="12" style="width: 150px; " />
+					</td>
+				</tr>
+				<tr>
+					<td><ice:outputText value="Codice VLT" rendered="#{seicentoTable.selectIndex==0}"/></td>
+				</tr>
+				<tr>
+					<td><p:inputText value="#{seicentoTable.aams_vlt_id}" rendered="#{seicentoTable.selectIndex==0}"
+								maxlength="11" style="width: 150px; " /></td>
+				</tr>
+			</table>
+			</ice:panelGroup>
+			<br />
+
+		
+
+			<ice:panelTabSet id="panel_tab_set_confr" tabChangeListener="#{seicentoTable.tabChangeListenerIcefaces}" selectedIndex="#{seicentoTable.selectIndex}" style="display: block;">
+
+				<ice:panelTab id="panel_tab_vlt_confr" label="Dettagli per VLT">
+				
+				<ice:panelGrid columns="4">
+				
+				<ice:dataExporter label="Esporta in xls" renderLabelAsButton="false" binding="#{seicentoTable.dataExporterXlsVlt}" image="./css/images/xls_icon.png"
+					for="panel_tab_set_confr:panel_tab_vlt_confr:lista_confronti_meter_vlt" ignorePagination="true" outputTypeHandler="#{seicentoTable.customExcelExporter}"
+					popupBlockerLabel="Popup Blocker detected - click here to resume download..." type="excel"/> 
+					&nbsp;
+				<ice:dataExporter label="Esporta in csv" renderLabelAsButton="false" binding="#{seicentoTable.dataExporterCsvVlt}" image="./css/images/csv_icon.png"
+					for="panel_tab_set_confr:panel_tab_vlt_confr:lista_confronti_meter_vlt" type="csv" ignorePagination="true"
+					popupBlockerLabel="Popup Blocker detected - click here to resume download..." />
+					<ice:panelGroup>
+					<table>
+						<tr>
+							<td style="padding-left: 60px;">
+								<h:commandButton
+									value="Mostra solo differenze"
+									action="#{seicentoTable.nonMostrareTutto_vlt}"
+									disabled="#{!seicentoTable.mostraTutto_vlt}"
+									style="font-weight: bold; width:160px;" />
+								<br/>
+								<h:commandButton
+									value="Mostra tutti i valori"
+									action="#{seicentoTable.mostraTutto_vlt}"
+									disabled="#{seicentoTable.mostraTutto_vlt}"
+									style="font-weight: bold; width:160px;" />
+							</td>
+							<td style="padding-left: 300px;">
+								<ice:outputText
+									value="N.B.: Le caselle che presentano differenze sono evidenziate in rosso." />
+								<br/>
+								<ice:outputText
+									value="N.B.: Se una colonna rimane vuota, il msg 600 o il Sogei Report di quella vlt non sono presenti." />
+							</td>
+						</tr>
+					</table>
+					</ice:panelGroup>
+				</ice:panelGrid>
+	
+
+
+					<div >
+										
+				<ice:dataTable id="lista_confronti_meter_vlt" border="1"
+						resizable="false" columnClasses="columnClass" 
+						rowClasses="oddRow, evenRow" styleClass="tableStyle" rows="20"
+						value="#{seicentoTable.confronti_vlt}" var="item">
+						<f:facet name="header">
+							<ice:columnGroup>
+								<ice:headerRow>
+								
+									
+									<ice:column rowspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerAamsLocationId_vlt}"
+											columnName="Codice sala" value="Codice sala" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									
+									<ice:column rowspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerLocationName_vlt}"
+											columnName="Nome sala" value="Nome sala" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									
+									<ice:column rowspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerGsVltId}"
+											columnName="GS VLT ID" value="GS VLT ID" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									
+									<ice:column rowspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerAamsVltId}"
+											columnName="Aams VLT ID" value="Aams VLT ID" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									
+									<ice:column rowspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerData_vlt}"
+											columnName="Data" value="Data" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerBet_vlt}"
+											columnName="Bet" value="Bet" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerWin_vlt}"
+											columnName="Win" value="Win" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerGamesPlayed_vlt}"
+											columnName="Games Played" value="Games Played" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerTotalIn_vlt}"
+											columnName="Total In" value="Total In" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerTotalOut_vlt}"
+											columnName="Total Out" value="Total Out" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+								</ice:headerRow>
+
+								<ice:headerRow>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+									
+								</ice:headerRow>
+							</ice:columnGroup>
+						</f:facet>
+						
+
+						<ice:column>
+							<ice:outputText value="#{item.aams_location_id}" />
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText value="#{item.location_name}" style="width: 260px;" />
+						</ice:column>
+						
+						<ice:column>
+							<ice:outputText value="#{item.gs_vlt_id}"/>
+						</ice:column>
+						
+						<ice:column>
+							<ice:outputText value="#{item.aams_vlt_id}"/>
+						</ice:column>
+
+						<ice:column >
+							<ice:outputText value="#{item.data}" styleClass="iceOutTxtDate">
+								<f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="#{meterTable.timeZone}" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.bet}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						
+						<ice:column rendered="#{(item.seicento.bet - item.sogei.bet)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.bet}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.bet - item.sogei.bet)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.bet}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+					<ice:column rendered="#{(item.seicento.win - item.sogei.win)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.win - item.sogei.win)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.win}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number" 
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column rendered="#{(item.seicento.gamesPlayed - item.sogei.gamesPlayed)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.gamesPlayed - item.sogei.gamesPlayed)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.gamesPlayed}" >
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.totalIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column rendered="#{(item.seicento.totalIn - item.sogei.totalIn)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.totalIn - item.sogei.totalIn)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalIn}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.totalOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column rendered="#{(item.seicento.totalOut - item.sogei.totalOut)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.totalOut - item.sogei.totalOut)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalOut}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						
+						<f:facet name="footer">
+							<ice:columnGroup>
+								<ice:headerRow style="background-color: #CCFFCC;border-color: #cccccc;">
+									<ice:column colspan="5">
+										<ice:outputText style="padding-left: 5px" value="Totale:" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totBet600}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totBetS}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totWin600}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totWinS}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totGP600}" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totGPS}" />
+									</ice:column>
+									
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totTotIn600}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totTotInS}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totTotOut600}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totTotOutS}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+
+								</ice:headerRow>
+								
+								<ice:headerRow style="background-color: #FFFFCC; border-color: #cccccc;">
+									<ice:column colspan="5">
+										<ice:outputText style="padding-left: 5px" value="Differenza:" />
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffBet}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffWin}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffGP}" />
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffTotIn}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffTotOut}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+								</ice:headerRow>
+							</ice:columnGroup>
+						</f:facet>
+
+					</ice:dataTable>
+					
+					</div>
+					<br/>
+					<ice:dataPaginator id="dataScroll600_vlt" for="lista_confronti_meter_vlt"
+						paginator="true" fastStep="3" paginatorMaxPages="4"
+						rowsCountVar="rowsCount" 
+						displayedRowsCountVar="displayedRowsCount"
+						firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+						pageCountVar="pageCount" pageIndexVar="pageIndex">
+						<f:facet name="first">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-first.gif"
+								style="border:none;" title="First Page"/>
+						</f:facet>
+						<f:facet name="last">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-last.gif"
+								style="border:none;" title="Last Page"/>
+						</f:facet>
+						<f:facet name="previous">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-previous.gif"
+								style="border:none;" title="Previous Page"/>
+						</f:facet>
+						<f:facet name="next">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-next.gif"
+								style="border:none;" title="Next Page"/>
+						</f:facet>
+						<f:facet name="fastforward">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-ff.gif"
+								style="border:none;" title="Fast Forward"/>
+						</f:facet>
+						<f:facet name="fastrewind">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-fr.gif"
+								style="border:none;" title="Fast Backwards"/>
+						</f:facet>
+						<ice:outputFormat styleClass="standard"
+							value="{0} elementi trovati, sono visualizzati {1} elementi, da {2} a {3}.">
+							<f:param value="#{rowsCount}" />
+							<f:param value="#{displayedRowsCount}" />
+							<f:param value="#{firstRowIndex}" />
+							<f:param value="#{lastRowIndex}" />
+							<f:param value="#{pageIndex}" />
+							<f:param value="#{pageCount}" />
+						</ice:outputFormat>
+
+					</ice:dataPaginator>
+				</ice:panelTab>
+
+
+
+
+
+
+
+
+
+
+
+				<ice:panelTab id="panel_tab_locations" label="Dettagli per sala">
+					<ice:panelGrid columns="4">
+						<ice:dataExporter label="Esporta in xls" 
+							renderLabelAsButton="false"
+							binding="#{seicentoTable.dataExporterXlsLocation}"
+							image="./css/images/xls_icon.png"
+							for="panel_tab_set_confr:panel_tab_locations:lista_confronti_meter_locations"
+							type="excel" ignorePagination="true"
+							outputTypeHandler="#{seicentoTable.customExcelExporter}"
+							popupBlockerLabel="Popup Blocker detected - click here to resume download..." />
+					&nbsp;
+						<ice:dataExporter label="Esporta in csv" renderLabelAsButton="false" 
+							binding="#{seicentoTable.dataExporterCsvLocation}" 
+							image="./css/images/csv_icon.png"
+							for="panel_tab_set_confr:panel_tab_locations:lista_confronti_meter_locations"
+							type="csv" ignorePagination="true"
+							popupBlockerLabel="Popup Blocker detected - click here to resume download..." />
+							<ice:panelGroup>
+					<table>
+						<tr>
+							<td style="padding-left: 60px;">
+								<h:commandButton
+									value="Mostra solo differenze"
+									action="#{seicentoTable.nonMostrareTutto_locations}"
+									disabled="#{!seicentoTable.mostraTutto_locations}"
+									style="font-weight: bold; width:160px;" />
+								<br/>
+								<h:commandButton
+									value="Mostra tutti i valori"
+									action="#{seicentoTable.mostraTutto_locations}"
+									disabled="#{seicentoTable.mostraTutto_locations}"
+									style="font-weight: bold; width:160px;" />
+							</td>
+							<td style="padding-left: 300px;">
+								<ice:outputText
+									value="N.B.: Le caselle che presentano differenze sono evidenziate in rosso." />
+								<br/>
+								<ice:outputText
+									value="N.B.: Se una colonna rimane vuota, il msg 600 o il Sogei Report di quella vlt non sono presenti." />
+							</td>
+						</tr>
+					</table>
+					</ice:panelGroup>
+					</ice:panelGrid>
+					<br />
+
+
+					<ice:dataTable id="lista_confronti_meter_locations" border="1"
+						resizable="false" columnClasses="columnClass" 
+						rowClasses="oddRow, evenRow" styleClass="tableStyle" rows="20"
+						value="#{seicentoTable.confronti_locations}" var="item">
+						<f:facet name="header">
+							<ice:columnGroup>
+								<ice:headerRow>
+									<ice:column rowspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerAamsLocationId_locations}"
+											columnName="Codice sala" value="Codice sala" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									<ice:column rowspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerLocationName_locations}"
+											columnName="Nome sala" value="Nome sala" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									<ice:column rowspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerData_locations}"
+											columnName="Data" value="Data" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerNumVlt_locations}"
+											columnName="G. macchina" value="G. macchina" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerBet_locations}"
+											columnName="Bet" value="Bet" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerWin_locations}"
+											columnName="Win" value="Win" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerGamesPlayed_locations}"
+											columnName="Games Played" value="Games Played" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerTotalIn_locations}"
+											columnName="Total In" value="Total In" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+									<ice:column colspan="2">
+										<ice:commandSortHeader
+											actionListener="#{seicentoTable.ordinaPerTotalOut_locations}"
+											columnName="Total Out" value="Total Out" arrow="true">
+										</ice:commandSortHeader>
+									</ice:column>
+								</ice:headerRow>
+
+								<ice:headerRow>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText value="600" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText value="Sogei" />
+									</ice:column>
+								</ice:headerRow>
+							</ice:columnGroup>
+						</f:facet>
+
+						<ice:column>
+							<ice:outputText value="#{item.aams_location_id}" />
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText value="#{item.location_name}" style="width: 260px;" />
+						</ice:column>
+
+						<ice:column >
+							<ice:outputText value="#{item.data}"
+								styleClass="iceOutTxtDate">
+								<f:convertDateTime pattern="dd/MM/yyyy"
+									timeZone="#{meterTable.timeZone}" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText value="#{item.seicento.numVlt}"
+								styleClass="iceOutTxtNumber" />
+						</ice:column>
+
+						<ice:column rendered="#{(item.seicento.numVlt - item.sogei.numVlt)==0}">
+							<h:outputText value="#{item.sogei.numVlt}" styleClass="iceOutTxtNumber" />
+						</ice:column>
+						<ice:column style="background-color: #FFCCCC;" rendered="#{(item.seicento.numVlt - item.sogei.numVlt)!=0}">				
+							<h:outputText value="#{item.sogei.numVlt}" styleClass="iceOutTxtNumber"/>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.bet}" converter="javax.faces.BigDecimal">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						
+						<ice:column rendered="#{(item.seicento.bet - item.sogei.bet)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.bet}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.bet - item.sogei.bet)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.bet}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+					<ice:column rendered="#{(item.seicento.win - item.sogei.win)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.win}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.win - item.sogei.win)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.win}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number" locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column rendered="#{(item.seicento.gamesPlayed - item.sogei.gamesPlayed)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.gamesPlayed}">
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.gamesPlayed - item.sogei.gamesPlayed)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.gamesPlayed}" >
+								<f:convertNumber maxFractionDigits="0" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="number"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.totalIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column rendered="#{(item.seicento.totalIn - item.sogei.totalIn)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalIn}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.totalIn - item.sogei.totalIn)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalIn}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column>
+							<ice:outputText styleClass="iceOutTxtNumber"
+								value="#{item.seicento.totalOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+
+						<ice:column rendered="#{(item.seicento.totalOut - item.sogei.totalOut)==0}">
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalOut}">
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<ice:column rendered="#{(item.seicento.totalOut - item.sogei.totalOut)!=0}" style="background-color: #FFCCCC;">						
+							<ice:outputText styleClass="iceOutTxtNumber" 
+								value="#{item.sogei.totalOut}" >
+								<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+									currencySymbol="" maxIntegerDigits="15" type="currency"
+									locale="it_IT" />
+							</ice:outputText>
+						</ice:column>
+						<f:facet name="footer">
+							<ice:columnGroup>
+								<ice:headerRow style="background-color: #CCFFCC;border-color: #cccccc;">
+									<ice:column colspan="3">
+										<ice:outputText style="padding-left: 5px" value="Totale:" />
+									</ice:column>
+
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber" value="#{seicentoTable.totGM600}"/>											
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totGMS}" />
+									</ice:column>
+									
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totBet600}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totBetS}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totWin600}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totWinS}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totGP600}" />
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totGPS}" />
+									</ice:column>
+									
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totTotIn600}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totTotInS}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totTotOut600}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									<ice:column>
+										<ice:outputText styleClass="iceOutTxtNumber"  value="#{seicentoTable.totTotOutS}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+
+								</ice:headerRow>
+								
+								<ice:headerRow style="background-color: #FFFFCC; border-color: #cccccc;">
+									<ice:column colspan="3">
+										<ice:outputText style="padding-left: 5px" value="Differenza:" />
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffGM}" />
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffBet}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffWin}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffGP}" />
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffTotIn}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+									<ice:column colspan="2">
+										<ice:outputText style="text-align: center; font-weight: bold;"  value="#{seicentoTable.diffTotOut}" >
+										<f:convertNumber maxFractionDigits="2" groupingUsed="true"
+												currencySymbol="" maxIntegerDigits="15" type="currency"
+												locale="it_IT" />
+										</ice:outputText>
+									</ice:column>
+									
+								</ice:headerRow>
+							</ice:columnGroup>
+						</f:facet>
+
+					</ice:dataTable>
+					
+					<br />
+					<ice:dataPaginator id="dataScrollmeter_locations"
+						for="lista_confronti_meter_locations" paginator="true"
+						fastStep="3" paginatorMaxPages="4" rowsCountVar="rowsCount"
+						displayedRowsCountVar="displayedRowsCount"
+						firstRowIndexVar="firstRowIndex" lastRowIndexVar="lastRowIndex"
+						pageCountVar="pageCount" pageIndexVar="pageIndex">
+						<f:facet name="first">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-first.gif"
+								style="border:none;" title="First Page"/>
+						</f:facet>
+						<f:facet name="last">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-last.gif"
+								style="border:none;" title="Last Page"/>
+						</f:facet>
+						<f:facet name="previous">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-previous.gif"
+								style="border:none;" title="Previous Page"/>
+						</f:facet>
+						<f:facet name="next">
+							<ice:graphicImage
+								url="./xmlhttp/css/xp/css-images/arrow-next.gif"
+								style="border:none;" title="Next Page"/>
+						</f:facet>
+						<f:facet name="fastforward">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-ff.gif"
+								style="border:none;" title="Fast Forward"/>
+						</f:facet>
+						<f:facet name="fastrewind">
+							<ice:graphicImage url="./xmlhttp/css/xp/css-images/arrow-fr.gif"
+								style="border:none;" title="Fast Backwards"/>
+						</f:facet>
+						<ice:outputFormat styleClass="standard"
+							value="{0} elementi trovati, sono visualizzati {1} elementi, da {2} a {3}.">
+							<f:param value="#{rowsCount}" />
+							<f:param value="#{displayedRowsCount}" />
+							<f:param value="#{firstRowIndex}" />
+							<f:param value="#{lastRowIndex}" />
+							<f:param value="#{pageIndex}" />
+							<f:param value="#{pageCount}" />
+						</ice:outputFormat>
+
+					</ice:dataPaginator>
+
+				</ice:panelTab>
+			</ice:panelTabSet>
+			
+		</h:form>
+	</ice:panelGroup>
+	
+	
+	<br/><br/>
+
+
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>

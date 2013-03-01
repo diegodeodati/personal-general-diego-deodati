@@ -1,0 +1,44 @@
+<Context path="/betplus" reloadable="true" antiJarLocking="true" antiResourceLocking="true"> 
+	<!-- Db connection -->
+	<!-- 
+	<Resource name="jdbc/oracle" 
+		auth="Container"
+		factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory" 
+		type="javax.sql.DataSource"
+		driverClassName="oracle.jdbc.OracleDriver" 
+		url="jdbc:oracle:thin:@192.168.100.82:1521:LTIB"
+		username="luca" password="luca" removeAbandoned="true"
+		accessToUnderlyingConnectionAllowed="true" maxActive="20" maxIdle="10"
+		maxwait="-1" />
+		-->
+	<Realm className="org.apache.catalina.realm.JDBCRealm"
+		connectionName="datamart" connectionPassword="datamart"
+		connectionURL="jdbc:oracle:thin:@10.0.6.99:1521:TESTBI" driverName="oracle.jdbc.OracleDriver"
+		userTable="UTENTI" userNameCol="USERNAME" userCredCol="USER_PASS"
+		userRoleTable="RUOLI" roleNameCol="RUOLO" />	
+		
+   <Resource name="hibernate/OracleSessionFactory"
+             auth="Container"
+             type="org.hibernate.SessionFactory"
+             factory="it.bplus.util.HibernateSessionFactoryTomcatFactory"
+             configuration="hibernate.cfg.xml"/>		
+             
+   <Resource name="jdbc/oracle_datamart" auth="Container"
+		factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory" type="javax.sql.DataSource"
+		driverClassName="oracle.jdbc.OracleDriver" url="jdbc:oracle:thin:@10.0.6.99:1521:TESTBI"
+		username="datamart" password="datamart" removeAbandoned="true"
+		validationQuery="Select * from dual" validationQueryTimeout="30000"
+		accessToUnderlyingConnectionAllowed="true" maxActive="4" maxIdle="2"
+		removeAbandonedTimeout="3000" maxStatementsPerConnection="2" maxwait="-1" />
+		
+	<Resource name="jdbc/oracle_staging" auth="Container"
+		factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory" type="javax.sql.DataSource"
+		driverClassName="oracle.jdbc.OracleDriver" url="jdbc:oracle:thin:@10.0.6.99:1521:TESTBI"
+		username="staging" password="staging" removeAbandoned="true"
+		validationQuery="Select * from dual" validationQueryTimeout="30000"
+		accessToUnderlyingConnectionAllowed="true" maxActive="4" maxIdle="2"
+		removeAbandonedTimeout="3000" maxStatementsPerConnection="2" maxwait="-1" />
+             
+             <loader delegate="false" />
+             
+</Context>

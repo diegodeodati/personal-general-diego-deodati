@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:icecore="http://www.icefaces.org/icefaces/core"
+	xmlns:ace="http://www.icefaces.org/icefaces/components"
+	xmlns:ice="http://www.icesoft.com/icefaces/component">
+<h:head>
+	<title></title>
+
+        <link href="./css/style.css" rel="stylesheet" type="text/css" />
+</h:head>
+<h:body styleClass="ice-skin-sam">
+
+	<ui:include src="/intestazione.xhtml" />
+
+	<ui:include src="/menu.xhtml" />
+
+
+	<ice:panelGroup id="centerFix" styleClass="TabCenterBI" >
+	
+	<iframe height="100%" width="100%" frameborder="0"
+	src="http://10.0.6.100:8080/mondrian/index.jsp "/>
+	
+</ice:panelGroup>
+
+</h:body>
+<h:outputStylesheet library="org.icefaces.component.skins"
+	name="sam.css"></h:outputStylesheet>
+</html>
